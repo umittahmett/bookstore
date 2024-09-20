@@ -23,10 +23,14 @@
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./app/*"]
+      "~/*": ["./app/*"],
+      "@assets/*": ["./public/assets/*"],
+      "@components/*": ["./app/components/*"],
+      "@data/*": ["./app/data/*"],
+      "@lib/*": ["./app/lib/*"],
+      "@public/*": ["./public/*"],
     },
 
-    // Vite takes care of building everything, not tsc.
     "noEmit": true
   }
 }
