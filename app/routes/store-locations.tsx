@@ -1,9 +1,9 @@
 import { Search, X } from "lucide-react"
 import { useEffect, useState } from "react"
-import StoreLocation from "~/components/store-location"
-import Heading from "~/components/ui/heading"
-import { Input } from "~/components/ui/input"
-import { Select } from "~/components/ui/select"
+import StoreLocation from "@components/store-location"
+import Heading from "@components/ui/heading"
+import { Input } from "@components/ui/input"
+import { Select } from "@components/ui/select"
 import { locations } from "~/data/dummy"
 import { StoreLocationProps } from "~/types"
 
