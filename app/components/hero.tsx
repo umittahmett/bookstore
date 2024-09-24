@@ -1,5 +1,12 @@
 import { ArrowRight } from "lucide-react"
 import { Button } from "@components/ui/button"
+import Book1 from "@assets/images/books/hero-book-1.jpg"
+import Book2 from "@assets/images/books/hero-book-2.jpg"
+import Book3 from "@assets/images/books/hero-book-3.jpg"
+import Book4 from "@assets/images/books/hero-book-4.jpg"
+import Book5 from "@assets/images/books/hero-book-5.jpg"
+import Book6 from "@assets/images/books/hero-book-6.jpg"
+import Book7 from "@assets/images/books/hero-book-7.jpg"
 
 const Hero = () => {
   return (
@@ -28,37 +35,14 @@ const Hero = () => {
                     <div className="h-64 w-44 overflow-hidden rounded-lg sm:opacity-0 lg:opacity-100">
                       <img
                         alt=""
-                        src="https://tailwindui.com/img/ecommerce-images/home-page-03-hero-image-tile-01.jpg"
+                        src={Book1}
                         className="h-full w-full object-cover object-center"
                       />
                     </div>
                     <div className="h-64 w-44 overflow-hidden rounded-lg">
                       <img
                         alt=""
-                        src="https://tailwindui.com/img/ecommerce-images/home-page-03-hero-image-tile-02.jpg"
-                        className="h-full w-full object-cover object-center"
-                      />
-                    </div>
-                  </div>
-                  <div className="grid flex-shrink-0 grid-cols-1 gap-y-6 lg:gap-y-8">
-                    <div className="h-64 w-44 overflow-hidden rounded-lg">
-                      <img
-                        alt=""
-                        src="https://tailwindui.com/img/ecommerce-images/home-page-03-hero-image-tile-03.jpg"
-                        className="h-full w-full object-cover object-center"
-                      />
-                    </div>
-                    <div className="h-64 w-44 overflow-hidden rounded-lg">
-                      <img
-                        alt=""
-                        src="https://tailwindui.com/img/ecommerce-images/home-page-03-hero-image-tile-04.jpg"
-                        className="h-full w-full object-cover object-center"
-                      />
-                    </div>
-                    <div className="h-64 w-44 overflow-hidden rounded-lg">
-                      <img
-                        alt=""
-                        src="https://tailwindui.com/img/ecommerce-images/home-page-03-hero-image-tile-05.jpg"
+                        src={Book2}
                         className="h-full w-full object-cover object-center"
                       />
                     </div>
@@ -67,14 +51,37 @@ const Hero = () => {
                     <div className="h-64 w-44 overflow-hidden rounded-lg">
                       <img
                         alt=""
-                        src="https://tailwindui.com/img/ecommerce-images/home-page-03-hero-image-tile-06.jpg"
+                        src={Book3}
                         className="h-full w-full object-cover object-center"
                       />
                     </div>
                     <div className="h-64 w-44 overflow-hidden rounded-lg">
                       <img
                         alt=""
-                        src="https://tailwindui.com/img/ecommerce-images/home-page-03-hero-image-tile-07.jpg"
+                        src={Book4}
+                        className="h-full w-full object-cover object-center"
+                      />
+                    </div>
+                    <div className="h-64 w-44 overflow-hidden rounded-lg">
+                      <img
+                        alt=""
+                        src={Book5}
+                        className="h-full w-full object-cover object-center"
+                      />
+                    </div>
+                  </div>
+                  <div className="grid flex-shrink-0 grid-cols-1 gap-y-6 lg:gap-y-8">
+                    <div className="h-64 w-44 overflow-hidden rounded-lg">
+                      <img
+                        alt=""
+                        src={Book6}
+                        className="h-full w-full object-cover object-center"
+                      />
+                    </div>
+                    <div className="h-64 w-44 overflow-hidden rounded-lg">
+                      <img
+                        alt=""
+                        src={Book7}
                         className="h-full w-full object-cover object-center"
                       />
                     </div>
