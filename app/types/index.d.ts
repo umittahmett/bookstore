@@ -18,3 +18,19 @@ export interface HeadingProps{
   description?: string; 
   type?: 'h1' | 'h2' | 'h3';
 }
+
+export interface BookProps {
+  id: number;
+  title: string;
+  author: string;
+  genre: string;
+  publication_date: string;
+  isbn: string;
+  page_count: number;
+  language: string;
+  price: number;
+  discount_percentage?: number;
+  stock_quantity: number;
+  cover_image_url: string;
+  description: string;
+}
