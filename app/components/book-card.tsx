@@ -1,12 +1,12 @@
 import React from 'react'
 import { BookProps } from '~/types'
 import { Button } from './ui/button'
-import { Heart, Plus } from 'lucide-react'
+import { Heart, LucideShoppingBag, Plus, ShoppingBag, ShoppingBasket } from 'lucide-react'
 import { formatPriceToUSD } from '~/lib/utils'
 
 export const BookCard: React.FC<BookProps> = (book) => {
   return (
-    <div className='shadow-sm rounded-lg py-6 bg-white h-full flex flex-col flex-grow'>
+    <div className='border border-zinc-100 w-72 rounded-lg py-6 bg-white h-full flex flex-col flex-grow'>
       <div className="h-48 w-full">
         <img
           alt={book.title}
@@ -35,7 +35,7 @@ export const BookCard: React.FC<BookProps> = (book) => {
           </div>
         </div>
 
-        <Button className='w-full sticky bottom-0 mt-6'> <Plus className='text-white size-4' /> Add to cart</Button>
+        <Button className='w-full sticky bottom-0 mt-6'> <ShoppingBag strokeWidth={1} className='text-white size-5' /> Add to cart</Button>
       </div>
     </div>
   )
