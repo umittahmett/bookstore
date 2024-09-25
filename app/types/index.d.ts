@@ -34,3 +34,12 @@ export interface BookProps {
   cover_image_url: string;
   description: string;
 }
+
+
+export interface ProductSliderProps {
+  title: string;
+  browseAllLink: string;
+  browseAllText: string;
+  books: BookProps[];
+  className?: string;
+}
