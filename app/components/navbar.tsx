@@ -21,7 +21,7 @@ const Navbar = () => {
             <button
               type="button"
               onClick={() => setOpen(false)}
-              className="relative -m-2 inline-flex items-center justify-center rounded-md p-2 text-gray-400"
+              className="relative -m-2 inline-flex items-center justify-center rounded-md p-2 text-zinc-400"
             >
               <span className="absolute -inset-0.5" />
               <span className="sr-only">Close menu</span>
@@ -31,13 +31,13 @@ const Navbar = () => {
 
           {/* Links */}
           <Tabs className="mt-2">
-            <div className="border-b border-gray-200">
+            <div className="border-b border-zinc-200">
               <TabsList className="-mb-px flex space-x-8 px-4">
                 {navigation.categories.map((category, index) => (
                   <TabsTrigger
                     value={category.id}
                     key={index}
-                    className="flex-1 whitespace-nowrap border-b-2 border-transparent px-1 py-4 text-base font-medium text-gray-900 data-[selected]:border-indigo-600 data-[selected]:text-indigo-600"
+                    className="flex-1 whitespace-nowrap border-b-2 border-transparent px-1 py-4 text-base font-medium text-zinc-900 data-[selected]:border-indigo-600 data-[selected]:text-indigo-600"
                   >
                     {category.name}
                   </TabsTrigger>
@@ -50,10 +50,10 @@ const Navbar = () => {
                 <div className="grid grid-cols-2 gap-x-4">
                   {category.featured.map((item) => (
                     <div key={item.name} className="group relative text-sm">
-                      <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100 duration-200 group-hover:opacity-75">
+                      <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-zinc-100 duration-200 group-hover:opacity-75">
                         <img alt={item.imageAlt} src={item.imageSrc} className="object-cover object-center" />
                       </div>
-                      <a href={item.href} className="mt-6 block font-medium text-gray-900">
+                      <a href={item.href} className="mt-6 block font-medium text-zinc-900">
                         <span aria-hidden="true" className="absolute inset-0 z-10" />
                         {item.name}
                       </a>
@@ -65,7 +65,7 @@ const Navbar = () => {
                 </div>
                 {category.sections.map((section) => (
                   <div key={section.name}>
-                    <p id={`${category.id}-${section.id}-heading-mobile`} className="font-medium text-gray-900">
+                    <p id={`${category.id}-${section.id}-heading-mobile`} className="font-medium text-zinc-900">
                       {section.name}
                     </p>
                     <ul
@@ -75,7 +75,7 @@ const Navbar = () => {
                     >
                       {section.items.map((item) => (
                         <li key={item.name} className="flow-root">
-                          <a href={item.href} className="-m-2 block p-2 text-gray-500">
+                          <a href={item.href} className="-m-2 block p-2 text-zinc-500">
                             {item.name}
                           </a>
                         </li>
@@ -88,37 +88,37 @@ const Navbar = () => {
 
           </Tabs>
 
-          <div className="space-y-6 border-t border-gray-200 px-4 py-6">
+          <div className="space-y-6 border-t border-zinc-200 px-4 py-6">
             {navigation.pages.map((page) => (
               <div key={page.name} className="flow-root">
-                <a href={page.href} className="-m-2 block p-2 font-medium text-gray-900">
+                <a href={page.href} className="-m-2 block p-2 font-medium text-zinc-900">
                   {page.name}
                 </a>
               </div>
             ))}
           </div>
 
-          <div className="space-y-6 border-t border-gray-200 px-4 py-6">
+          <div className="space-y-6 border-t border-zinc-200 px-4 py-6">
             <div className="flow-root">
-              <a href="#" className="-m-2 block p-2 font-medium text-gray-900">
+              <a href="#" className="-m-2 block p-2 font-medium text-zinc-900">
                 Sign in
               </a>
             </div>
             <div className="flow-root">
-              <a href="#" className="-m-2 block p-2 font-medium text-gray-900">
+              <a href="#" className="-m-2 block p-2 font-medium text-zinc-900">
                 Create account
               </a>
             </div>
           </div>
 
-          <div className="border-t border-gray-200 px-4 py-6">
+          <div className="border-t border-zinc-200 px-4 py-6">
             <a href="#" className="-m-2 flex items-center p-2">
               <img
                 alt=""
                 src="https://tailwindui.com/img/flags/flag-canada.svg"
                 className="block h-auto w-5 flex-shrink-0"
               />
-              <span className="ml-3 block text-base font-medium text-gray-900">CAD</span>
+              <span className="ml-3 block text-base font-medium text-zinc-900">CAD</span>
               <span className="sr-only">, change currency</span>
             </a>
           </div>
@@ -127,12 +127,12 @@ const Navbar = () => {
 
       <header className="relative bg-white">
         <nav aria-label="Top" className="default-container">
-          <div className="border-b border-gray-200">
+          <div className="border-b border-zinc-200">
             <div className="flex h-24 items-center">
               <button
                 type="button"
                 onClick={() => setOpen(true)}
-                className="relative rounded-md bg-white p-2 text-gray-400 lg:hidden"
+                className="relative rounded-md bg-white p-2 text-zinc-400 lg:hidden"
               >
                 <span className="absolute -inset-0.5" />
                 <span className="sr-only">Open menu</span>
@@ -156,7 +156,7 @@ const Navbar = () => {
                 <div className="flex h-full space-x-8">
                   {navigation.categories.map((category) => (
                     <DropdownMenu key={category.name} >
-                      <DropdownMenuTrigger className="outline-none relative z-10 -mb-px flex items-center border-b-2 border-transparent pt-px text-sm font-medium text-gray-700 transition-colors duration-200 ease-out hover:text-gray-800 data-[open]:text-indigo-600">
+                      <DropdownMenuTrigger className="outline-none relative z-10 -mb-px flex items-center border-b-2 border-transparent pt-px text-sm font-medium text-zinc-700 transition-colors duration-200 ease-out hover:text-zinc-800 data-[open]:text-indigo-600">
                         {category.name}
                       </DropdownMenuTrigger>
 
@@ -169,14 +169,14 @@ const Navbar = () => {
                               <div className="col-start-2 grid grid-cols-2 gap-x-8">
                                 {category.featured.map((item) => (
                                   <div key={item.name} className="group relative text-base sm:text-sm">
-                                    <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100 duration-200 group-hover:opacity-75">
+                                    <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-zinc-100 duration-200 group-hover:opacity-75">
                                       <img
                                         alt={item.imageAlt}
                                         src={item.imageSrc}
                                         className="object-cover object-center"
                                       />
                                     </div>
-                                    <a href={item.href} className="mt-6 block font-medium text-gray-900">
+                                    <a href={item.href} className="mt-6 block font-medium text-zinc-900">
                                       <span aria-hidden="true" className="absolute inset-0 z-10" />
                                       {item.name}
                                     </a>
@@ -189,7 +189,7 @@ const Navbar = () => {
                               <div className="row-start-1 grid grid-cols-3 gap-x-8 gap-y-10 text-sm">
                                 {category.sections.map((section) => (
                                   <div key={section.name}>
-                                    <p id={`${section.name}-heading`} className="font-medium text-gray-900">
+                                    <p id={`${section.name}-heading`} className="font-medium text-zinc-900">
                                       {section.name}
                                     </p>
                                     <ul
@@ -199,7 +199,7 @@ const Navbar = () => {
                                     >
                                       {section.items.map((item) => (
                                         <li key={item.name} className="flex">
-                                          <a href={item.href} className="hover:text-gray-800">
+                                          <a href={item.href} className="hover:text-zinc-800">
                                             {item.name}
                                           </a>
                                         </li>
@@ -220,7 +220,7 @@ const Navbar = () => {
                     <a
                       key={page.name}
                       href={page.href}
-                      className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800"
+                      className="flex items-center text-sm font-medium text-zinc-700 hover:text-zinc-800"
                     >
                       {page.name}
                     </a>
@@ -230,17 +230,17 @@ const Navbar = () => {
 
               <div className="ml-auto flex items-center">
                 <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
-                  <a href="/auth/login" className="text-sm font-medium text-gray-700 hover:text-gray-800">
+                  <a href="/auth/login" className="text-sm font-medium text-zinc-700 hover:text-zinc-800">
                     Sign in
                   </a>
-                  <span aria-hidden="true" className="h-6 w-px bg-gray-200" />
-                  <a href="/auth/register" className="text-sm font-medium text-gray-700 hover:text-gray-800">
+                  <span aria-hidden="true" className="h-6 w-px bg-zinc-200" />
+                  <a href="/auth/register" className="text-sm font-medium text-zinc-700 hover:text-zinc-800">
                     Create account
                   </a>
                 </div>
 
                 <div className="hidden lg:ml-8 lg:flex">
-                  <a href="#" className="flex items-center text-gray-700 hover:text-gray-800">
+                  <a href="#" className="flex items-center text-zinc-700 hover:text-zinc-800">
                     <img
                       alt=""
                       src="https://tailwindui.com/img/flags/flag-canada.svg"
@@ -253,7 +253,7 @@ const Navbar = () => {
 
                 {/* Search */}
                 <div className="flex lg:ml-6">
-                  <a href="#" className="p-2 text-gray-400 hover:text-gray-500">
+                  <a href="/search" className="p-2 text-zinc-400 hover:text-zinc-500">
                     <span className="sr-only">Search</span>
                     <Search aria-hidden="true" className="h-6 w-6" />
                   </a>
@@ -261,12 +261,12 @@ const Navbar = () => {
 
                 {/* Cart */}
                 <div className="ml-4 flow-root lg:ml-6">
-                  <a href="#" className="group -m-2 flex items-center p-2">
+                  <a href="/cart" className="group -m-2 flex items-center p-2">
                     <ShoppingBag
                       aria-hidden="true"
-                      className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
+                      className="h-6 w-6 flex-shrink-0 text-zinc-400 group-hover:text-zinc-500"
                     />
-                    <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">0</span>
+                    <span className="ml-2 text-sm font-medium text-zinc-700 group-hover:text-zinc-800">0</span>
                     <span className="sr-only">items in cart, view bag</span>
                   </a>
                 </div>
