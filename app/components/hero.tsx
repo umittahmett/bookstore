@@ -90,7 +90,7 @@ const Hero = () => {
               </div>
             </div>
 
-            <Button>Shop Now <ArrowRight className="size-5" /></Button>
+            <a href="/search"><Button>Shop Now <ArrowRight className="size-5" /></Button></a>
           </div>
         </div>
       </div>
