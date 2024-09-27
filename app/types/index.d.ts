@@ -33,13 +33,28 @@ export interface BookProps {
   stock_quantity: number;
   cover_image_url: string;
   description: string;
+  quantity: number;
+  selected?: boolean;
 }
-
-
 export interface ProductSliderProps {
   title: string;
   browseAllLink: string;
   browseAllText: string;
   books: BookProps[];
   className?: string;
+}
+export interface FilterCategory {
+  id?: string;
+  name: string;
+  subCategories?: FilterCategory[];
+}
+export interface MobileFilterProps {
+  onCloseClick: () => void;
+}
+export interface BookSearchProps {
+  onFilterClick: () => void;
+}
+export interface SortByProps {
+  id: string;
+  name: string;
 }
