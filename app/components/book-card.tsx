@@ -6,7 +6,7 @@ import { formatPriceToUSD } from '~/lib/utils'
 
 export const BookCard: React.FC<BookProps> = (book) => {
   return (
-    <div className='border border-zinc-100 w-72 rounded-lg py-6 bg-white h-full flex flex-col flex-grow'>
+    <div className='border border-zinc-100 min-w-72 rounded-lg py-6 bg-white h-full flex flex-col flex-grow'>
       <div className="h-48 w-full">
         <img
           alt={book.title}
