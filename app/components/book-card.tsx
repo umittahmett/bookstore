@@ -2,7 +2,7 @@ import React from 'react'
 import { BookProps } from '~/types'
 import { Button } from './ui/button'
 import { Heart, LucideShoppingBag, Plus, ShoppingBag, ShoppingBasket } from 'lucide-react'
-import { formatPriceToUSD } from '~/lib/utils'
+import { formatPriceToUSD } from '@lib/utils'
 
 export const BookCard: React.FC<BookProps> = (book) => {
   return (
@@ -35,7 +35,7 @@ export const BookCard: React.FC<BookProps> = (book) => {
           </div>
         </div>
 
-        <Button className='w-full sticky bottom-0 mt-6'> <ShoppingBag strokeWidth={1} className='text-white size-5' /> Add to cart</Button>
+        <Button className='w-full sticky mt-6'> <ShoppingBag strokeWidth={1} className='text-white size-5' /> Add to cart</Button>
       </div>
     </div>
   )
