@@ -1,4 +1,4 @@
-import { BookProps, StoreLocationProps } from "~/types";
+import { AddressProps, BookProps, StoreLocationProps } from "~/types";
 
 export const locations: StoreLocationProps[] = [
   {
@@ -299,3 +299,89 @@ export const books: BookProps[] = [
   }
 ];
 
+
+export const addresses:AddressProps[] = [
+  {
+    name: 'Home 1',
+    firstName: 'Home',
+    lastName: 'John Doe',
+    address: '123 Main St',
+    addressLine2: 'Apt 2B',
+    country: 'United States',
+    city: 'Los Angeles',
+    zip: '90001',
+    phone: '123-456-7890',
+    additionalInfo: 'Ring the bell for Apt 2B'
+  },
+  {
+    name: 'Home 2',
+    firstName: 'Work',
+    lastName: 'John Doe',
+    address: '456 Broadway',
+    addressLine2: 'Floor 3',
+    country: 'United States',
+    city: 'New York',
+    zip: '10012',
+    phone: '123-456-7890',
+    additionalInfo: 'Ring the bell for Apt 2B'
+  },
+
+
+  {
+    name: 'Home 2',
+    firstName: 'Work',
+    lastName: 'John Doe',
+    address: '456 Broadway',
+    addressLine2: 'Floor 3',
+    country: 'United States',
+    city: 'New York',
+    zip: '10012',
+    phone: '123-456-7890',
+    additionalInfo: 'Ring the bell for Apt 2B'
+  },  {
+    name: 'Home 2',
+    firstName: 'Work',
+    lastName: 'John Doe',
+    address: '456 Broadway',
+    addressLine2: 'Floor 3',
+    country: 'United States',
+    city: 'New York',
+    zip: '10012',
+    phone: '123-456-7890',
+    additionalInfo: 'Ring the bell for Apt 2B'
+  },  {
+    name: 'Home 2',
+    firstName: 'Work',
+    lastName: 'John Doe',
+    address: '456 Broadway',
+    addressLine2: 'Floor 3',
+    country: 'United States',
+    city: 'New York',
+    zip: '10012',
+    phone: '123-456-7890',
+    additionalInfo: 'Ring the bell for Apt 2B'
+  },  {
+    name: 'Home 2',
+    firstName: 'Work',
+    lastName: 'John Doe',
+    address: '456 Broadway',
+    addressLine2: 'Floor 3',
+    country: 'United States',
+    city: 'New York',
+    zip: '10012',
+    phone: '123-456-7890',
+    additionalInfo: 'Ring the bell for Apt 2B'
+  },
+  {
+    name: 'Home 3',
+    firstName: 'Grandma',
+    lastName: 'Jane Doe',
+    address: '789 5th Ave',
+    addressLine2: 'Apt 1C',
+    country: 'United States',
+    city: 'New York',
+    zip: '10022',
+    phone: '123-456-7890',
+    additionalInfo: 'Ring the bell for Apt 2B'
+  }
+]
