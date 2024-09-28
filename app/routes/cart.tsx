@@ -1,11 +1,10 @@
 import { useState } from 'react'
-import { Trash2, X } from 'lucide-react'
-import { Checkbox } from '~/components/ui/checkbox'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select'
-import { Button } from '~/components/ui/button'
+import { Trash2 } from 'lucide-react'
+import { Checkbox } from '@components/ui/checkbox'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@components/ui/select'
+import { Button } from '@components/ui/button'
 import { BookProps } from '~/types'
-import { books } from '~/data/dummy'
-
+import { books } from '@data/dummy'
 
 export default function Component() {
   const [cartItems, setCartItems] = useState<BookProps[]>(books)
@@ -55,6 +54,7 @@ export default function Component() {
           <h1 className="text-2xl font-bold">Your Cart</h1>
           <span className="text-zinc-600">{cartItems.length} Items in cart</span>
         </div>
+
         <div className="space-y-4">
           <div className='flex items-center justify-between'>
             <div className="flex items-center space-x-2">
@@ -143,5 +143,3 @@ export default function Component() {
     </div>
   )
 }
-
-
