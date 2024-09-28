@@ -1,5 +1,5 @@
 import { Dribbble, Facebook, Github, Instagram, Twitter } from "lucide-react";
-import { NavigationLinkProps, SocialLinkProps } from "~/types";
+import { JobOpeningProps, NavigationLinkProps, SocialLinkProps, TimelineProps } from "~/types";
 import ExampleBannerImage from "@assets/images/examples/example-banner-image.jpg";
 
 export const footerNavigation: NavigationLinkProps[] = [
@@ -168,7 +168,66 @@ export const navigation = {
     },
   ],
   pages: [
-    { name: 'About Us', href: '#' },
+    { name: 'About Us', href: '/about-us' },
     { name: 'Store Locations', href: '/store-locations' },
   ],
 };
+
+
+export const timeline:TimelineProps[] = [
+  {
+    name: 'Founded company',
+    description:
+      'Nihil aut nam. Dignissimos a pariatur et quos omnis. Aspernatur asperiores et dolorem dolorem optio voluptate repudiandae.',
+    date: 'Aug 2021',
+    dateTime: '2021-08',
+  },
+  {
+    name: 'Secured $65m in funding',
+    description:
+      'Provident quia ut esse. Vero vel eos repudiandae aspernatur. Cumque minima impedit sapiente a architecto nihil.',
+    date: 'Dec 2021',
+    dateTime: '2021-12',
+  },
+  {
+    name: 'Released beta',
+    description:
+      'Sunt perspiciatis incidunt. Non necessitatibus aliquid. Consequatur ut officiis earum eum quia facilis. Hic deleniti dolorem quia et.',
+    date: 'Feb 2022',
+    dateTime: '2022-02',
+  },
+  {
+    name: 'Global launch of product',
+    description:
+      'Ut ipsa sint distinctio quod itaque nam qui. Possimus aut unde id architecto voluptatem hic aut pariatur velit.',
+    date: 'Dec 2022',
+    dateTime: '2022-12',
+  },
+]
+export const jobOpenings:JobOpeningProps[] = [
+  {
+    role: 'Full-time designer',
+    href: '#',
+    description:
+      'Quos sunt ad dolore ullam qui. Enim et quisquam dicta molestias. Corrupti quo voluptatum eligendi autem labore.',
+    salary: '$75,000 USD',
+    location: 'San Francisco, CA',
+  },
+  {
+    role: 'Laravel developer',
+    href: '#',
+    description:
+      'Et veniam et officia dolorum rerum. Et voluptas consequatur magni sapiente amet voluptates dolorum. Ut porro aut eveniet.',
+    salary: '$125,000 USD',
+    location: 'San Francisco, CA',
+  },
+  {
+    role: 'React Native developer',
+    href: '#',
+    description:
+      'Veniam ipsam nisi quas architecto eos non voluptatem in nemo. Est occaecati nihil omnis delectus illum est.',
+    salary: '$105,000 USD',
+    location: 'San Francisco, CA',
+  },
+]
+
