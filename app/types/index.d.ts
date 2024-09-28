@@ -18,7 +18,6 @@ export interface HeadingProps{
   description?: string; 
   type?: 'h1' | 'h2' | 'h3';
 }
-
 export interface BookProps {
   id: number;
   title: string;
@@ -57,4 +56,33 @@ export interface BookSearchProps {
 export interface SortByProps {
   id: string;
   name: string;
+}
+export interface JobOpeningProps {
+  role:string
+  href:string
+  description: string
+  salary:string
+  location:string
+}
+export interface TimelineProps {
+  name: string;
+  description: string;
+  date: string;
+  dateTime: string;
+}
+
+export interface AddressProps {
+  name: string;
+  firstName: string;
+  lastName: string;
+  address: string;
+  addressLine2?: string;
+  country: string;
+  city: string;
+  zip: string;
+  phone: string;
+  additionalInfo?: string;
+  moreDetailed?: boolean;
+  className?: string;
+  onClick?: () => void;
 }
