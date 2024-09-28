@@ -1,4 +1,4 @@
-import { formatPriceToUSD } from "~/lib/utils";
+import { formatPriceToUSD } from "@lib/utils";
 import { Button } from "./ui/button";
 import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTitle } from "./ui/sheet";
 import { X } from "lucide-react";

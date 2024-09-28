@@ -11,7 +11,7 @@ import clsx from "clsx";
 import { useSearchParams } from "@remix-run/react";
 import { BookProps } from "~/types";
 import { books } from "~/data/dummy";
-import { BookCard } from "~/components/book-card";
+import { BookCard } from "@components/book-card";
 import BookCardSkeleton from "@components/skeletons/book-card-skeleton";
 
 const ProjectList = () => {
