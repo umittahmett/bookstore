@@ -1,10 +1,9 @@
 import type { MetaFunction } from "@remix-run/node";
 import Hero from "@components/hero";
 import Cta from "@components/sections/cta";
-import { BookCard } from "@components/book-card";
 import { books } from "@data/dummy";
 import Discover from "@components/sections/discover";
-import ProductSlider from "~/components/sections/poduct-slider";
+import ProductSlider from "@components/sections/poduct-slider";
 
 export const meta: MetaFunction = () => {
   return [
