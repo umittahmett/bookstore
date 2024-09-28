@@ -18,12 +18,12 @@ const MobileFilter: React.FC<MobileFilterProps> = ({ onCloseClick }) => {
           Filters
         </h2>
         <Button
-          size="icon"
+          variant="close"
+          size="closeIcon"
           onClick={onCloseClick}
-          variant="outline"
-          className="flex-shrink-0"
+          className="flex-shrink-0 "
         >
-          <X className="size-5" />
+          <X strokeWidth={1} className="size-5" />
         </Button>
       </div>
 
