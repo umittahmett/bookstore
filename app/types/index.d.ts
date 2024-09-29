@@ -1,6 +1,7 @@
 export interface NavigationLinkProps {
   title: string;
   href?: string;
+  icon?: ElementType;
   links?: NavigationLinkProps[];
 }
 export interface SocialLinkProps{
