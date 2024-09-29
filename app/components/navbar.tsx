@@ -125,9 +125,9 @@ const Navbar = () => {
         </DialogContent>
       </Dialog>
 
-      <header className="relative bg-white">
+      <header className="relative bg-white border-b border-zinc-200">
         <nav aria-label="Top" className="default-container">
-          <div className="border-b border-zinc-200">
+          <div className="">
             <div className="flex h-24 items-center">
               <button
                 type="button"
