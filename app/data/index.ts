@@ -1,4 +1,4 @@
-import { Dribbble, Facebook, Github, Instagram, Twitter } from "lucide-react";
+import { CreditCard, Dribbble, Facebook, Github, HelpCircle, Instagram, MapPin, Package, RotateCcw, Twitter, User } from "lucide-react";
 import { JobOpeningProps, NavigationLinkProps, SocialLinkProps, TimelineProps } from "~/types";
 import ExampleBannerImage from "@assets/images/examples/example-banner-image.jpg";
 
@@ -231,3 +231,11 @@ export const jobOpenings:JobOpeningProps[] = [
   },
 ]
 
+export const profileNavigation: NavigationLinkProps[] = [
+  { href: "/profile/orders", title: "Orders",icon: Package },
+  { href: "/profile/saved-cards", title: "Saved Cards",icon: CreditCard },
+  { href: "/profile/addresses", title: "Addresses",icon: MapPin },
+  { href: "/profile/help", title: "Help",icon: HelpCircle },
+  { href: "/profile/user-info", title: "User Info",icon: User },
+  { href: "/profile/repurchase", title: "Repurchase",icon: RotateCcw },
+];
