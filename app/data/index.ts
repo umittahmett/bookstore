@@ -1,6 +1,6 @@
 import { CreditCard, Dribbble, Facebook, Github, HelpCircle, Instagram, MapPin, Package, RotateCcw, Twitter, User } from "lucide-react";
 import { JobOpeningProps, NavigationLinkProps, SocialLinkProps, TimelineProps } from "~/types";
-import ExampleBannerImage from "@assets/images/examples/example-banner-image.jpg";
+import ExampleBannerImage from "@assets/images/examples/example-banner-image.webp";
 
 export const footerNavigation: NavigationLinkProps[] = [
   {

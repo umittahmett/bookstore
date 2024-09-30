@@ -1,16 +1,16 @@
 import { ArrowRight } from "lucide-react"
 import { Button } from "@components/ui/button"
-import Book1 from "@assets/images/books/hero-book-1.jpg"
-import Book2 from "@assets/images/books/hero-book-2.jpg"
-import Book3 from "@assets/images/books/hero-book-3.jpg"
-import Book4 from "@assets/images/books/hero-book-4.jpg"
-import Book5 from "@assets/images/books/hero-book-5.jpg"
+import Book1 from "@assets/images/books/hero-book-1.webp"
+import Book2 from "@assets/images/books/hero-book-2.webp"
+import Book3 from "@assets/images/books/hero-book-3.webp"
+import Book4 from "@assets/images/books/hero-book-4.webp"
+import Book5 from "@assets/images/books/hero-book-5.webp"
 import Book6 from "@assets/images/books/hero-book-6.jpg"
-import Book7 from "@assets/images/books/hero-book-7.jpg"
+import Book7 from "@assets/images/books/hero-book-7.webp"
 
 const Hero = () => {
   return (
-    <div className="pb-80 overflow-hidden relative pt-16 sm:pb-40 sm:pt-24 lg:pb-48 lg:pt-40" >
+    <div className="pb-80 overflow-hidden relative pt-16 sm:pb-40 sm:pt-24 lg:pb-48 lg:pt-40">
       <div className="relative mx-auto max-w-7xl px-4 sm:static sm:px-6 lg:px-8">
         <div className="sm:max-w-lg">
           <h1 className="text-4xl font-bold tracking-tight text-zinc-900 sm:text-6xl">

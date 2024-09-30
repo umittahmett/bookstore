@@ -1,9 +1,9 @@
-import Books1 from "@assets/images/books/book-sale-1.jpg"
-import Books2 from "@assets/images/books/book-sale-2.jpg"
-import Books3 from "@assets/images/books/book-sale-3.jpg"
-import Books4 from "@assets/images/books/book-sale-4.jpg"
-import Books5 from "@assets/images/books/book-sale-5.jpg"
-import Books6 from "@assets/images/books/book-sale-6.jpg"
+import Books1 from "@assets/images/books/book-sale-1.webp"
+import Books2 from "@assets/images/books/book-sale-2.webp"
+import Books3 from "@assets/images/books/book-sale-3.webp"
+import Books4 from "@assets/images/books/book-sale-4.webp"
+import Books5 from "@assets/images/books/book-sale-5.webp"
+import Books6 from "@assets/images/books/book-sale-6.webp"
 
 const Cta = () => {
   return (

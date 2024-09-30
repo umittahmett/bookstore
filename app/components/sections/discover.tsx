@@ -1,5 +1,5 @@
 import { Button } from "@components/ui/button"
-import DiscoverBackground from "@assets/images/backgrounds/discover-section-background.jpg"
+import DiscoverBackground from "@assets/images/backgrounds/discover-section-background.webp"
 
 const Discover = () => {
   return (
