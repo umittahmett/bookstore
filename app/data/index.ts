@@ -233,7 +233,6 @@ export const jobOpenings:JobOpeningProps[] = [
 
 export const profileNavigation: NavigationLinkProps[] = [
   { href: "/profile/orders", title: "Orders",icon: Package },
-  { href: "/profile/saved-cards", title: "Saved Cards",icon: CreditCard },
   { href: "/profile/addresses", title: "Addresses",icon: MapPin },
   { href: "/profile/help", title: "Help",icon: HelpCircle },
   { href: "/profile/user-info", title: "User Info",icon: User },
