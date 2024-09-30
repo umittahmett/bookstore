@@ -1,4 +1,4 @@
-import { AddressProps, BookProps, StoreLocationProps } from "~/types";
+import { AddressProps, BookProps, OrderProps, StoreLocationProps } from "~/types";
 
 export const locations: StoreLocationProps[] = [
   {
@@ -383,5 +383,62 @@ export const addresses:AddressProps[] = [
     zip: '10022',
     phone: '123-456-7890',
     additionalInfo: 'Ring the bell for Apt 2B'
+  }
+]
+
+export const deliveredOrders:OrderProps[] = [
+  {
+    product: books[0],
+    date: '10 Eylül 2024',
+    seller: 'Amazon',
+    status: 'pending',
+    count: 1,
+    address: addresses[0],
+    receiver: 'John Doe'
+  },
+  {
+    product: books[1],
+    date: '10 Eylül 2024',
+    seller: 'Amazon',
+    status: 'pending',
+    count: 1,
+    address: addresses[0],
+    receiver: 'John Doe'
+  },
+  {
+    product: books[2],
+    date: '10 Eylül 2024',
+    seller: 'Amazon',
+    status: 'delivered',
+    count: 1,
+    address: addresses[0],
+    receiver: 'John Doe'
+  },
+  {
+    product: books[3],
+    date: '10 Eylül 2024',
+    seller: 'Amazon',
+    status: 'pending',
+    count: 1,
+    address: addresses[0],
+    receiver: 'John Doe'
+  },
+  {
+    product: books[4],
+    date: '10 Eylül 2024',
+    seller: 'Amazon',
+    status: 'delivered',
+    count: 1,
+    address: addresses[0],
+    receiver: 'John Doe'
+  },
+  {
+    product: books[5],
+    date: '10 Eylül 2024',
+    seller: 'Amazon',
+    status: 'delivered',
+    count: 1,
+    address: addresses[0],
+    receiver: 'John Doe'
   }
 ]
