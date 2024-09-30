@@ -2,6 +2,7 @@ import { Search } from "lucide-react"
 import { Button } from "@components/ui/button"
 import { Input } from "@components/ui/input"
 import { Card, CardContent } from "@components/ui/card"
+import { deliveredOrders } from "~/data/dummy"
 
 export default function Repurchase() {
   return (
@@ -16,17 +17,19 @@ export default function Repurchase() {
         <Search className="absolute left-3 top-3 size-5 text-zinc-400" />
       </div>
       <div className="grid gap-4">
-        {[1, 2, 3].map((item) => (
-          <Card key={item}>
+        {deliveredOrders.map((item, index) => (
+          <Card key={index}>
             <CardContent className="p-4">
               <div className="flex items-center space-x-4">
-                <div className="w-16 h-16 bg-zinc-200 rounded-md"></div>
+                <div className='size-20 flex-shrink-0 rounded-lg bg-zinc-100 flex p-2 items-center justify-center'>
+                  <img src={item.product.cover_image_url} alt={item.product.title} className="h-full w-fit object-contain" />
+                </div>
                 <div className="flex-grow">
-                  <h3 className="font-semibold">Ürün Adı {item}</h3>
+                  <h3 className="font-semibold">Ürün Adı {item.product.title}</h3>
                   <p className="text-sm text-zinc-500">Son sipariş tarihi: {new Date().toLocaleDateString()}</p>
                 </div>
                 <div className="text-right">
-                  <div className="font-semibold">149,99 TL</div>
+                  <div className="font-semibold">{item.product.price * item.count} TL</div>
                   <Button size="sm" className="mt-2">Sepete Ekle</Button>
                 </div>
               </div>
