@@ -87,3 +87,20 @@ export interface AddressProps {
   className?: string;
   onClick?: () => void;
 }
+
+export interface CustomerProps {
+  name: string;
+  email: string;
+  phone: string;
+  addresses: AddressProps[];
+}
+
+export interface OrderProps {
+  seller: string;
+  date: string;
+  status: string;
+  product: BookProps;
+  count: number;
+  receiver: string;
+  address: AddressProps;
+}
