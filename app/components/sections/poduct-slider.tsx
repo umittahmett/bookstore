@@ -1,4 +1,4 @@
-import { BookCard } from '@components/book-card'
+import { BookCard } from '@components/cards/book-card'
 import { ProductSliderProps } from '~/types'
 import { useRef } from 'react'
 import { Button } from '@components/ui/button'
@@ -37,15 +37,16 @@ const ProductSlider: React.FC<ProductSliderProps> = ({ title, browseAllText, bro
           <h2 id="category-heading" className="text-2xl font-bold tracking-tight text-zinc-900">
             {title}
           </h2>
-          <a href={browseAllLink} className="hidden text-sm font-semibold text-amber-500 hover:text-amber-600 duration-200 sm:block">
-            {browseAllText}
-            <span aria-hidden="true"> &rarr;</span>
-          </a>
+          {browseAllText &&
+            <a href={browseAllLink} className="hidden text-sm font-semibold text-amber-500 hover:text-amber-600 duration-200 sm:block">
+              {browseAllText}
+              <span aria-hidden="true"> &rarr;</span>
+            </a>}
         </div>
 
         <div ref={sliderRef} className="mt-6 lg:pb-2 hide-scroll grid grid-flow-col-dense gap-6 overflow-x-auto">
           {books.map((book) => (
-            <BookCard key={book.id} {...book} />
+            <BookCard key={book._id?.toString()} {...book} />
           ))}
         </div>
 
