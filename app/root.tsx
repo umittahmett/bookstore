@@ -1,16 +1,19 @@
 import {
+  json,
   Links,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
 } from "@remix-run/react";
-import type { LinksFunction } from "@remix-run/node";
-
-
+import type { LinksFunction, LoaderFunction } from "@remix-run/node";
 import "./tailwind.css";
 import Footer from "@components/footer";
 import Navbar from "@components/navbar";
+import { Toaster } from "@components/ui/sonner";
+import { tokenCookie } from "@utils/cookie";
+import { verifyJWT } from "@utils/auth.server";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -25,7 +28,32 @@ export const links: LinksFunction = () => [
   },
 ];
 
+export const loader: LoaderFunction = async ({ request }) => {
+  try {
+    const token = await tokenCookie.parse(request.headers.get("Cookie"));
+
+    if (!token) {
+      console.log("Token bulunamadı, kullanıcı login değil.");
+      return json({ user: null });
+    }
+
+    const user = verifyJWT(token);
+
+    if (!user) {
+      console.log("Token geçersiz veya süresi dolmuş.");
+      return json({ user: null });
+    }
+
+    console.log("User bulundu:", user);
+    return json({ user });
+  } catch (error) {
+    console.error("Loader sırasında bir hata oluştu:", error);
+    throw new Error("Sunucu hatası: Kullanıcı doğrulama işlemi başarısız.");
+  }
+};
+
 export function Layout({ children }: { children: React.ReactNode }) {
+  const loaderData = useLoaderData<typeof loader>();
   return (
     <html lang="en">
       <head>
@@ -35,11 +63,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        <Navbar />
+        <Navbar user={loaderData.user} />
         {children}
         <Footer />
         <ScrollRestoration />
         <Scripts />
+        <Toaster />
       </body>
     </html>
   );
