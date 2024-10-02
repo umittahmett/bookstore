@@ -1,4 +1,4 @@
-export default function ProjectCardSkeleton() {
+export default function BookCardSkeleton() {
   return (
     <div className="w-full border border-slate-200 bg-white flex flex-col justify-between rounded-3xl p-5 animate-pulse">
       <div>
