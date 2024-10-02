@@ -2,6 +2,32 @@ import { Button } from "@components/ui/button"
 import { Outlet, useLocation } from "@remix-run/react"
 import { profileNavigation } from "~/data"
 import clsx from "clsx"
+import { json, LoaderFunction, redirect } from "@remix-run/node";
+import { tokenCookie } from "@utils/cookie";
+import { verifyJWT } from "@utils/auth.server";
+
+export const loader: LoaderFunction = async ({ request }) => {
+  try {
+    const token = await tokenCookie.parse(request.headers.get("Cookie"));
+
+    if (!token) {
+      console.log("Token bulunamadı, kullanıcı login değil.");
+      return redirect("/auth/login");
+    }
+
+    const user = verifyJWT(token);
+
+    if (!user) {
+      console.log("Token geçersiz veya süresi dolmuş.");
+      return redirect("/auth/login");
+    }
+
+    return json({ user });
+  } catch (error) {
+    console.error("Loader sırasında bir hata oluştu:", error);
+    throw new Error("Sunucu hatası: Kullanıcı doğrulama işlemi başarısız.");
+  }
+};
 
 export default function OrderManagement() {
   const location = useLocation()
