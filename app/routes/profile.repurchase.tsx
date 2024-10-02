@@ -22,7 +22,7 @@ export default function Repurchase() {
             <CardContent className="p-4">
               <div className="flex items-center space-x-4">
                 <div className='size-20 flex-shrink-0 rounded-lg bg-zinc-100 flex p-2 items-center justify-center'>
-                  <img src={item.product.cover_image_url} alt={item.product.title} className="h-full w-fit object-contain" />
+                  <img src={item.product.images[0]} alt={item.product.title} className="h-full w-fit object-contain" />
                 </div>
                 <div className="flex-grow">
                   <h3 className="font-semibold">Ürün Adı {item.product.title}</h3>
