@@ -29,6 +29,7 @@
       "@data/*": ["./app/data/*"],
       "@lib/*": ["./app/lib/*"],
       "@public/*": ["./public/*"],
+      "@utils/*": ["./utils/*"],
     },
 
     "noEmit": true
