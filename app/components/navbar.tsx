@@ -1,15 +1,19 @@
-import { useState } from 'react'
-import { Menu, Search, ShoppingBag, X } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { Menu, Search, ShoppingBag, UserCircle, UserCircle2, X } from 'lucide-react'
 import { navigation } from '~/data'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs'
 import { Dialog, DialogContent } from './ui/dialog'
 import { DropdownMenu } from '@radix-ui/react-dropdown-menu'
 import { DropdownMenuContent, DropdownMenuTrigger } from './ui/dropdown-menu'
 import DarkLogo from "@assets/images/logos/dark-logo.png";
+import { AvatarIcon } from '@radix-ui/react-icons'
 
-const Navbar = () => {
+const Navbar = ({ user }: any) => {
   const [open, setOpen] = useState(false)
 
+  useEffect(() => {
+    console.log(user);
+  }, [])
   return (
     <div className="bg-white">
       {/* Mobile menu */}
@@ -98,18 +102,30 @@ const Navbar = () => {
             ))}
           </div>
 
-          <div className="space-y-6 border-t border-zinc-200 px-4 py-6">
-            <div className="flow-root">
-              <a href="#" className="-m-2 block p-2 font-medium text-zinc-900">
-                Sign in
-              </a>
+          {/* Kullanıcı login değilse Sign In ve Create Account linkleri */}
+          {!user ? (
+            <div className="space-y-6 border-t border-zinc-200 px-4 py-6">
+              <div className="flow-root">
+                <a href="/auth/login" className="-m-2 block p-2 font-medium text-zinc-900">
+                  Sign in
+                </a>
+              </div>
+              <div className="flow-root">
+                <a href="/auth/register" className="-m-2 block p-2 font-medium text-zinc-900">
+                  Create account
+                </a>
+              </div>
             </div>
-            <div className="flow-root">
-              <a href="#" className="-m-2 block p-2 font-medium text-zinc-900">
-                Create account
-              </a>
+          ) : (
+            <div className="border-t border-zinc-200 px-4 pt-4">
+              <div className="flow-root">
+                <a href="/profile" className="flex items-center gap-2.5 p-2 font-medium text-zinc-900">
+                  <AvatarIcon className='size-6' />
+                  My Account
+                </a>
+              </div>
             </div>
-          </div>
+          )}
 
           <div className="border-t border-zinc-200 px-4 py-6">
             <a href="#" className="-m-2 flex items-center p-2">
@@ -156,7 +172,7 @@ const Navbar = () => {
                 <div className="flex h-full space-x-8">
                   {navigation.categories.map((category) => (
                     <DropdownMenu key={category.name} >
-                      <DropdownMenuTrigger className="outline-none relative z-10 -mb-px flex items-center border-b-2 border-transparent pt-px text-sm font-medium text-zinc-700 transition-colors duration-200 ease-out hover:text-zinc-800 data-[open]:text-indigo-600">
+                      <DropdownMenuTrigger className="outline-none relative z-10 -mb-px flex items-center border-b-2 border-transparent pt-px text-sm font-medium text-zinc-700 transition-colors duration-200 ease-out hover:text-zinc-800 duration-200 data-[open]:text-indigo-600">
                         {category.name}
                       </DropdownMenuTrigger>
 
@@ -199,7 +215,7 @@ const Navbar = () => {
                                     >
                                       {section.items.map((item) => (
                                         <li key={item.name} className="flex">
-                                          <a href={item.href} className="hover:text-zinc-800">
+                                          <a href={item.href} className="hover:text-zinc-800 duration-200">
                                             {item.name}
                                           </a>
                                         </li>
@@ -220,7 +236,7 @@ const Navbar = () => {
                     <a
                       key={page.name}
                       href={page.href}
-                      className="flex items-center text-sm font-medium text-zinc-700 hover:text-zinc-800"
+                      className="flex items-center text-sm font-medium text-zinc-700 hover:text-zinc-800 duration-200"
                     >
                       {page.name}
                     </a>
@@ -229,18 +245,21 @@ const Navbar = () => {
               </div>
 
               <div className="ml-auto flex items-center">
-                <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
-                  <a href="/auth/login" className="text-sm font-medium text-zinc-700 hover:text-zinc-800">
-                    Sign in
-                  </a>
-                  <span aria-hidden="true" className="h-6 w-px bg-zinc-200" />
-                  <a href="/auth/register" className="text-sm font-medium text-zinc-700 hover:text-zinc-800">
-                    Create account
-                  </a>
-                </div>
+
+                {!user &&
+                  <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
+                    <a href="/auth/login" className="text-sm font-medium text-zinc-700 hover:text-zinc-800 duration-200">
+                      Sign in
+                    </a>
+                    <span aria-hidden="true" className="h-6 w-px bg-zinc-200" />
+                    <a href="/auth/register" className="text-sm font-medium text-zinc-700 hover:text-zinc-800 duration-200">
+                      Create account
+                    </a>
+                  </div>
+                }
 
                 <div className="hidden lg:ml-8 lg:flex">
-                  <a href="#" className="flex items-center text-zinc-700 hover:text-zinc-800">
+                  <a href="#" className="flex items-center text-zinc-700 hover:text-zinc-800 duration-200">
                     <img
                       alt=""
                       src="https://tailwindui.com/img/flags/flag-canada.svg"
@@ -253,21 +272,25 @@ const Navbar = () => {
 
                 {/* Search */}
                 <div className="flex lg:ml-6">
-                  <a href="/search" className="p-2 text-zinc-400 hover:text-zinc-500">
+                  <a href="/search" className="p-2 text-zinc-400 hover:text-zinc-800 duration-200">
                     <span className="sr-only">Search</span>
                     <Search aria-hidden="true" className="h-6 w-6" />
                   </a>
                 </div>
 
                 {/* Cart */}
-                <div className="ml-4 flow-root lg:ml-6">
+                <div className="ml-4 lg:ml-6 flex items-center gap-6">
                   <a href="/cart" className="group -m-2 flex items-center p-2">
                     <ShoppingBag
                       aria-hidden="true"
-                      className="h-6 w-6 flex-shrink-0 text-zinc-400 group-hover:text-zinc-500"
+                      className="h-6 w-6 flex-shrink-0 text-zinc-400 group-hover:text-zinc-800 duration-200"
                     />
-                    <span className="ml-2 text-sm font-medium text-zinc-700 group-hover:text-zinc-800">0</span>
+                    <span className="ml-2 text-sm font-medium text-zinc-700 group-hover:text-zinc-800 duration-200">0</span>
                     <span className="sr-only">items in cart, view bag</span>
+                  </a>
+
+                  <a href="/profile/orders" className='group p-2 pl-0'>
+                    <UserCircle className='size-6 group-hover:text-zinc-800 duration-200 text-zinc-400' />
                   </a>
                 </div>
               </div>
