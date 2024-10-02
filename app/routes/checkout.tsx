@@ -17,10 +17,10 @@ export default function CheckoutPage() {
     console.log('Applying coupon:', couponCode)
   }
   const calculateTotal = () => {
-    return books.reduce((total, book) => total + book.price * book.quantity, 0).toFixed(2)
+    return books.reduce((total, book) => total + book.price * book.stockQuantity, 0).toFixed(2)
   }
   const calculateSubtotal = () => {
-    return books.reduce((total, book) => total + book.price * book.quantity, 0).toFixed(2)
+    return books.reduce((total, book) => total + book.price * book.stockQuantity, 0).toFixed(2)
   }
   const [selectedAddress, setSelectedAddress] = useState<AddressProps | null>(null)
 
@@ -125,18 +125,18 @@ export default function CheckoutPage() {
 
               {/* Books */}
               {books.map((book) => (
-                <div key={book.id} className="flex justify-between items-center py-2 border-b">
+                <div key={book._id.toString()} className="flex justify-between items-center py-2 border-b">
                   <div className="flex items-center space-x-2">
                     <div className='size-20 rounded-lg bg-zinc-100 flex p-2 items-center justify-center'>
-                      <img src={book.cover_image_url} alt={book.title} className="h-full w-fit object-contain" />
+                      <img src={book.images[0]} alt={book.title} className="h-full w-fit object-contain" />
                     </div>
                     <div>
                       <p className="font-medium">{book.title}</p>
                       <p className="text-sm text-zinc-600">{book.author}</p>
-                      <p className="text-sm text-zinc-600">Qty: {book.quantity}</p>
+                      <p className="text-sm text-zinc-600">Qty: {book.stockQuantity}</p>
                     </div>
                   </div>
-                  <span className="font-medium">${(book.price * book.quantity).toFixed(2)}</span>
+                  <span className="font-medium">${(book.price * book.stockQuantity).toFixed(2)}</span>
                 </div>
               ))}
 
