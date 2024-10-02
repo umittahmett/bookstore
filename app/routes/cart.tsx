@@ -3,11 +3,11 @@ import { Trash2 } from 'lucide-react'
 import { Checkbox } from '@components/ui/checkbox'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@components/ui/select'
 import { Button } from '@components/ui/button'
-import { BookProps } from '~/types'
-import { books } from '@data/dummy'
+import { CartProductProps, CartProps } from '~/types'
+import { ObjectId } from 'mongodb'
 
-export default function Component() {
-  const [cartItems, setCartItems] = useState<BookProps[]>(books)
+const Cart: React.FC<CartProps> = ({ products }) => {
+  const [cartItems, setCartItems] = useState<CartProductProps[]>(products)
 
   const calculateSubtotal = () => {
     return cartItems.reduce((sum, item) =>
@@ -20,19 +20,19 @@ export default function Component() {
   const shipping = subtotal > 0 ? 10 : 0
   const total = subtotal + tax + shipping
 
-  const updateQuantity = (id: number, quantity: number) => {
+  const updateQuantity = (id: ObjectId, quantity: number) => {
     setCartItems(cartItems.map(item =>
-      item.id === id ? { ...item, quantity } : item
+      item._id === id ? { ...item, quantity } : item
     ))
   }
 
-  const removeItem = (id: number) => {
-    setCartItems(cartItems.filter(item => item.id !== id))
+  const removeItem = (id: ObjectId) => {
+    setCartItems(cartItems.filter(item => item._id !== id))
   }
 
-  const toggleItemSelection = (id: number) => {
+  const toggleItemSelection = (id: ObjectId) => {
     setCartItems(cartItems.map(item =>
-      item.id === id ? { ...item, selected: !item.selected } : item
+      item._id === id ? { ...item, selected: !item.selected } : item
     ))
   }
 
@@ -75,14 +75,14 @@ export default function Component() {
             )}
           </div>
           {cartItems.map((item) => (
-            <div key={item.id} className="flex items-center space-x-4 py-4 border-b">
+            <div key={item._id.toString()} className="flex items-center space-x-4 py-4 border-b">
               <Checkbox
-                id={`item-${item.id}`}
+                id={`item-${item._id}`}
                 checked={item.selected}
-                onCheckedChange={() => toggleItemSelection(item.id)}
+                onCheckedChange={() => toggleItemSelection(item._id)}
               />
               <div className='size-28 rounded-lg bg-zinc-100 flex p-2 items-center justify-center'>
-                <img src={item.cover_image_url} alt={item.title} className="h-full w-fit object-contain" />
+                <img src={item.images[0]} alt={item.title} className="h-full w-fit object-contain" />
               </div>
               <div className="flex-grow">
                 <h3 className="font-semibold">{item.title}</h3>
@@ -90,7 +90,7 @@ export default function Component() {
               </div>
               <Select
                 value={item.quantity.toString()}
-                onValueChange={(value) => updateQuantity(item.id, parseInt(value))}
+                onValueChange={(value) => updateQuantity(item._id, parseInt(value))}
               >
                 <SelectTrigger className="w-20">
                   <SelectValue />
@@ -104,7 +104,7 @@ export default function Component() {
                 </SelectContent>
               </Select>
               <span className="font-semibold">${item.price.toFixed(2)}</span>
-              <Button variant="ghost" size="icon" onClick={() => removeItem(item.id)}>
+              <Button variant="ghost" size="icon" onClick={() => removeItem(item._id)}>
                 <Trash2 className="h-5 w-5" />
               </Button>
             </div>
@@ -143,3 +143,5 @@ export default function Component() {
     </div>
   )
 }
+
+export default Cart
