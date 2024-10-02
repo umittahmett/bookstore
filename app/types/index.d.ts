@@ -1,3 +1,5 @@
+import { ObjectId, WithId } from "mongodb";
+
 export interface NavigationLinkProps {
   title: string;
   href?: string;
@@ -19,27 +21,36 @@ export interface HeadingProps{
   description?: string; 
   type?: 'h1' | 'h2' | 'h3';
 }
+
 export interface BookProps {
-  id: number;
+  _id: ObjectId;
+  reviewCount?: number;
+  seller: string;
+  publisher: string;
+  publicationDate: string;
+  longDescription: string;
   title: string;
+  pages: number;
   author: string;
   genre: string;
-  publication_date: string;
   isbn: string;
-  page_count: number;
   language: string;
   price: number;
-  discount_percentage?: number;
-  stock_quantity: number;
-  cover_image_url: string;
+  discountPercentage?: number;
+  stockQuantity: number;
+  images: string[];
   description: string;
-  quantity: number;
-  selected?: boolean;
 }
+
+export interface CartProductProps extends BookProps {
+  quantity: number;
+  selected: boolean;
+}
+
 export interface ProductSliderProps {
   title: string;
-  browseAllLink: string;
-  browseAllText: string;
+  browseAllLink?: string;
+  browseAllText?: string;
   books: BookProps[];
   className?: string;
 }
@@ -53,6 +64,7 @@ export interface MobileFilterProps {
 }
 export interface BookSearchProps {
   onFilterClick: () => void;
+  hideFilter?: boolean;
 }
 export interface SortByProps {
   id: string;
@@ -94,7 +106,6 @@ export interface CustomerProps {
   phone: string;
   addresses: AddressProps[];
 }
-
 export interface OrderProps {
   seller: string;
   date: string;
@@ -103,4 +114,14 @@ export interface OrderProps {
   count: number;
   receiver: string;
   address: AddressProps;
+}
+export interface ProductListProps {
+  products: JsonifyObject<BookProps[]>;
+}
+export interface CartProps{
+  products: JsonifyObject<CartProductProps[]>;
+}
+export interface SidebarFilterProps{
+  maxPriceRange: number;
+  minPriceRange: number;
 }
