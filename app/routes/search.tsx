@@ -1,33 +1,65 @@
-// Components
 import MobileFilter from "@components/sections/mobile-filter";
 import SidebarFilter from "@components/sections/sidebar-filter";
 import BookSearch from "@components/sections/book-search";
-import { ArrowLeft, ArrowRight } from "lucide-react";
-// Types
-
-// Utils
-import { useEffect, useState } from "react";
-import clsx from "clsx";
-import { useSearchParams } from "@remix-run/react";
+import { Suspense, useEffect, useState } from "react";
+import { mongodb } from "@utils/db.server";
+import { useLoaderData, useSearchParams } from "@remix-run/react";
 import { BookProps } from "~/types";
-import { books } from "~/data/dummy";
-import { BookCard } from "@components/book-card";
+import ProductList from "@components/sections/product-list";
 import BookCardSkeleton from "@components/skeletons/book-card-skeleton";
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@components/ui/pagination";
+import { LoaderFunction, json } from "@remix-run/node";
+
+// Server action
+export const loader: LoaderFunction = async ({ request }) => {
+  const url = new URL(request.url);
+  const keyword = url.searchParams.get("keyword") || "";
+  const author = url.searchParams.get("author")?.split(',');
+  const genre = url.searchParams.get("genre")?.split(',');
+  const language = url.searchParams.get("language")?.split(',');
+  const minPrice = url.searchParams.get("minPrice");
+  const maxPrice = url.searchParams.get("maxPrice");
+  const db = mongodb.db('bookstore');
+  const collection = db.collection('products');
+  const query: any = {};
+
+  if (keyword) {
+    query.$or = [
+      { title: { $regex: keyword, $options: "i" } },
+      { description: { $regex: keyword, $options: "i" } }
+    ];
+  }
+
+  // Filter by author
+  if (author) { query.author = { $in: author } }
+
+  // Filter by genre
+  if (genre) { query.genre = { $in: genre } }
+
+  // Filter by language
+  if (language) { query.language = { $in: language } }
+
+  // Filter by price (min and/or max)
+  if (minPrice || maxPrice) {
+    query.price = {};
+    if (minPrice) {
+      query.price.$gte = parseFloat(minPrice);
+    }
+    if (maxPrice) {
+      query.price.$lte = parseFloat(maxPrice);
+    }
+  }
+
+  const products = await collection.find(query).toArray();
+  return json(products);
+};
 
 const ProjectList = () => {
-  const pageIndex = '1';
+  const products = useLoaderData<BookProps[]>();
+  const totalPages = Array.from({ length: 10 }, (_, i) => i + 1);
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState<boolean>(false);
-  const currentPage = pageIndex ? parseInt(pageIndex) : 1;
-  const [projects, setProjects] = useState<BookProps[]>([]);
-  const [totalPages, setTotalPages] = useState<number[]>([]);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    setLoading(true);
-    setProjects(books);
-    setLoading(false);
-  }, []);
-
+  // Disable scrolling when mobile filter is open
   useEffect(() => {
     if (isMobileFilterOpen) {
       document.body.style.overflow = "hidden";
@@ -38,65 +70,52 @@ const ProjectList = () => {
     }
   }, [isMobileFilterOpen]);
 
+  // Get the min and max price range
+  const getMinMaxPriceRange = () => {
+    const prices = products.map((product) => product.price);
+    const minPriceRange = Math.min(...prices);
+    const maxPriceRange = Math.max(...prices);
+    return { minPriceRange, maxPriceRange };
+  }
+
   return (
     <div className="default-container pb-16 w-full relative mt-10 grid grid-cols-12 gap-6">
       {/* Filters */}
-      <SidebarFilter />
+      <div className="max-xl:col-span-4 xl:col-span-3 max-lg:hidden">
+        {products.length > 0 && <SidebarFilter maxPriceRange={getMinMaxPriceRange().maxPriceRange} minPriceRange={getMinMaxPriceRange().minPriceRange} />}
+      </div>
 
       {/* Search */}
       <div className="col-span-full xl:col-span-9 lg:col-span-8">
         <BookSearch onFilterClick={() => setIsMobileFilterOpen(true)} />
         <div className="flex flex-col space-y-5 mt-5">
-          <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-5">
-            {loading
-              ? Array(6)
-                .fill(0)
-                .map((_, index) => <BookCardSkeleton key={index} />)
-              : projects.map((item: BookProps, index) => (
-                <BookCard key={index} {...item} />
-              ))}
-          </div>
+          <Suspense fallback={
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 w-full">
+              <BookCardSkeleton />
+            </div>
+          }>
+            <ProductList products={products} />
+          </Suspense>
 
-          <div className="flex  justify-center mt-10">
-            <nav
-              aria-label="Pagination"
-              className="isolate  space-x-2 inline-flex rounded-md shadow-sm"
-            >
-              <a
-                href="#"
-                className="relative inline-flex items-center px-4 py-2 ring-1 ring-inset ring-zinc-300 hover:bg-zinc-50 focus:z-20 focus:outline-offset-0"
-              >
-                <ArrowLeft aria-hidden="true" className="size-4" />
-              </a>
-
-              {totalPages.map((pageItem: number) => (
-                <a
-                  key={pageItem}
-                  href={`/projects?page=${pageItem}`}
-                  aria-current="page"
-                  className={clsx(
-                    {
-                      "bg-[#FF0000] text-white focus-visible:outline-red-600 z-10 font-semibold":
-                        pageItem == currentPage,
-                    },
-                    {
-                      "text-zinc-900 ring-1 ring-inset ring-zinc-300 hover:bg-zinc-50 focus:outline-offset-0":
-                        pageItem != currentPage,
-                    },
-                    "relative inline-flex items-center px-4 py-2 text-sm focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
-                  )}
-                >
-                  {pageItem}
-                </a>
-              ))}
-              <a
-                href="#"
-                className="relative inline-flex items-center px-4 py-2 ring-1 ring-inset ring-zinc-300 hover:bg-zinc-50 focus:z-20 focus:outline-offset-0"
-              >
-                <ArrowRight aria-hidden="true" className="size-4" />
-              </a>
-            </nav>
-          </div>
+          {/* Pagination */}
+          {
+            products.length > 10 &&
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious href="#" />
+                </PaginationItem>
+                {totalPages.map((item: number) => (
+                  <PaginationItem key={item}>
+                    <PaginationLink href="#">{item}</PaginationLink>
+                  </PaginationItem>
+                ))}
+                <PaginationItem>
+                  <PaginationNext href="#" />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          }
         </div>
       </div>
 
