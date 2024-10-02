@@ -33,31 +33,7 @@ export const bookFilters: FilterCategory[] = [
       { name: "J.R.R. Tolkien" },
       { name: "Agatha Christie" },
     ],
-  },
-  {
-    name: "Price Range",
-    subCategories: [
-      { name: "$0 - $10" },
-      { name: "$10 - $20" },
-      { name: "$20 - $30" },
-      { name: "$30 - $50" },
-      { name: "Above $50" },
-    ],
-  },
-  {
-    name: "Publication Year",
-    subCategories: [
-      { name: "2023" },
-      { name: "2022" },
-      { name: "2021" },
-      { name: "2020" },
-      { name: "2010-2019" },
-      { name: "2000-2009" },
-      { name: "1990-1999" },
-      { name: "1980-1989" },
-      { name: "Before 1980" },
-    ],
-  },
+  }, 
   {
     name: "Language",
     subCategories: [
@@ -67,15 +43,6 @@ export const bookFilters: FilterCategory[] = [
       { name: "German" },
       { name: "Chinese" },
       { name: "Japanese" },
-    ],
-  },
-  {
-    name: "Format",
-    subCategories: [
-      { name: "Hardcover" },
-      { name: "Paperback" },
-      { name: "E-book" },
-      { name: "Audiobook" },
     ],
   },
 ];
