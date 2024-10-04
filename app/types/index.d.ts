@@ -118,10 +118,23 @@ export interface OrderProps {
 export interface ProductListProps {
   products: JsonifyObject<BookProps[]>;
 }
-export interface CartProps{
-  products: JsonifyObject<CartProductProps[]>;
-}
+
 export interface SidebarFilterProps{
   maxPriceRange: number;
   minPriceRange: number;
+}
+
+export interface CartProps extends WithId<Document> {
+  productId: string;
+  quantity: number;
+  selected: boolean;
+}
+export interface CounterProps {
+  onChange?: (e: any) => void;
+  defaultValue?: number;
+  isRequired?: boolean;
+  label?: string;
+  reduce: () => void;
+  increase: () => void;
+  count?: number;
 }
