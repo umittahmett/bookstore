@@ -4,10 +4,10 @@ import { Label } from "@components/ui/label";
 import { ActionFunction, json, redirect } from "@remix-run/node";
 import { useActionData, useNavigation, useSubmit } from "@remix-run/react";
 import { createUser } from "@utils/customer.server";
+import { db } from "@utils/db.server";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
-
 
 export const action: ActionFunction = async ({ request }) => {
   const formPayload = Object.fromEntries(await request.formData())
@@ -17,12 +17,18 @@ export const action: ActionFunction = async ({ request }) => {
     password: z.string(),
   })
 
+  // Validate form data
   try {
     const data = registerSchema.parse(formPayload)
-    const user = await createUser({ email: data.email, password: data.password, fullName: data.fullName });
-    if (!user) {
-      return json({ error: "Kullanıcı oluşturulamadı" }, { status: 401 });
-    }
+    const user = await createUser({ email: data.email, password: data.password, fullName: data.fullName })
+    const userCart = await db.collection("carts").insertOne({ userId: user, products: [] })
+
+    // Check if user or cart was created
+    if (!user || !userCart) { return json({ error: "Kullanıcı oluşturulamadı" }, { status: 401 }) }
+
+    // Update user with cart ID
+    await db.collection("customers").updateOne({ _id: user }, { $set: { cartId: userCart.insertedId } })
+
     return redirect("/auth/login");
   } catch (error) {
     return json({ error: "Kullanıcı oluşturulamadı" }, { status: 500 });
