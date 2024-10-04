@@ -3,7 +3,7 @@
 import jwt from "jsonwebtoken";
 
 export function createJWT(user: any) {
-  return jwt.sign({ id: user._id, email: user.email, fullName: user.fullName }, process.env.SECRET_KEY || "", {
+  return jwt.sign({ id: user._id, email: user.email, fullName: user.fullName, cartId: user.cartId }, process.env.SECRET_KEY || "", {
     expiresIn: "1h",
   });
 }
