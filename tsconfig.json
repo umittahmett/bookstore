@@ -30,6 +30,7 @@
       "@lib/*": ["./app/lib/*"],
       "@public/*": ["./public/*"],
       "@utils/*": ["./utils/*"],
+      "@hooks/*": ["./app/hooks/*"],
     },
 
     "noEmit": true
