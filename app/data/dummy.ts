@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 import { AddressProps, BookProps, CartProductProps, OrderProps, StoreLocationProps } from "~/types";
 
 export const locations: StoreLocationProps[] = [
@@ -337,7 +338,7 @@ export const books: BookProps[] = [
 
 export const cartProducts:CartProductProps[] = [
   {
-    id: 1,
+    _id: new ObjectId('60f1b3b3b3b3b3b3b3b3b3b1'),
     title: "1984",
     longDescription: `One of the most universally loved and admired English novels, Pride and Prejudice was penned as a popular entertainment. But the consummate artistry of Jane Austen (1775–1817) transformed this effervescent tale of rural romance into a witty, shrewdly observed satire of English country life that is now regarded as one of the principal treasures of English language. In a remote Hertfordshire village, far off the good coach roads of George III's England, a country squire of no great means must marry off his five vivacious daughters. At the heart of this all-consuming enterprise are his headstrong second daughter Elizabeth Bennet and her aristocratic suitor Fitzwilliam Darcy — two lovers whose pride must be humbled and prejudices dissolved before the novel can come to its splendid conclusion.`,
     author: "George Orwell",
@@ -354,10 +355,11 @@ export const cartProducts:CartProductProps[] = [
     seller: "Penguin",
     publisher: "Penguin Books",
     reviewCount: 1000,
-    quantity:1
+    quantity:1,
+    selected: true,
   },
   { 
-    id: 2,
+    _id: new ObjectId('60f1b3b3b3b3b3b3b3b3b3b2'),
     title: "To Kill a Mockingbird",
     longDescription: `One of the most universally loved and admired English novels, Pride and Prejudice was penned as a popular entertainment. But the consummate artistry of Jane Austen (1775–1817) transformed this effervescent tale of rural romance into a witty, shrewdly observed satire of English country life that is now regarded as one of the principal treasures of English language. In a remote Hertfordshire village, far off the good coach roads of George III's England, a country squire of no great means must marry off his five vivacious daughters. At the heart of this all-consuming enterprise are his headstrong second daughter Elizabeth Bennet and her aristocratic suitor Fitzwilliam Darcy — two lovers whose pride must be humbled and prejudices dissolved before the novel can come to its splendid conclusion.`,
     author: "Harper Lee",
@@ -373,10 +375,11 @@ export const cartProducts:CartProductProps[] = [
     seller: "HarperCollins",
     publisher: "J.B. Lippincott & Co.",
     reviewCount: 2000,
-    quantity:1
+    quantity:1,
+    selected: true,
   },
   {
-    id: 3,
+    _id: new ObjectId('60f1b3b3b3b3b3b3b3b3b3b3'),
     title: "The Great Gatsby",
     longDescription: `One of the most universally loved and admired English novels, Pride and Prejudice was penned as a popular entertainment. But the consummate artistry of Jane Austen (1775–1817) transformed this effervescent tale of rural romance into a witty, shrewdly observed satire of English country life that is now regarded as one of the principal treasures of English language. In a remote Hertfordshire village, far off the good coach roads of George III's England, a country squire of no great means must marry off his five vivacious daughters. At the heart of this all-consuming enterprise are his headstrong second daughter Elizabeth Bennet and her aristocratic suitor Fitzwilliam Darcy — two lovers whose pride must be humbled and prejudices dissolved before the novel can come to its splendid conclusion.`,
     author: "F. Scott Fitzgerald",
@@ -392,10 +395,11 @@ export const cartProducts:CartProductProps[] = [
     seller: "Scribner",
     publisher: "Charles Scribner's Sons",
     reviewCount: 1500,
-    quantity:1
+    quantity:1,
+    selected: true,
   },
   {
-    id: 4,
+    _id: new ObjectId('60f1b3b3b3b3b3b3b3b3b3b4'),
     title: "Pride and Prejudice",
     longDescription: `One of the most universally loved and admired English novels, Pride and Prejudice was penned as a popular entertainment. But the consummate artistry of Jane Austen (1775–1817) transformed this effervescent tale of rural romance into a witty, shrewdly observed satire of English country life that is now regarded as one of the principal treasures of English language. In a remote Hertfordshire village, far off the good coach roads of George III's England, a country squire of no great means must marry off his five vivacious daughters. At the heart of this all-consuming enterprise are his headstrong second daughter Elizabeth Bennet and her aristocratic suitor Fitzwilliam Darcy — two lovers whose pride must be humbled and prejudices dissolved before the novel can come to its splendid conclusion.`,
     author: "Jane Austen",
@@ -411,7 +415,8 @@ export const cartProducts:CartProductProps[] = [
     seller: "Penguin",
     publisher: "T. Egerton, Whitehall",
     reviewCount: 1200,
-    quantity:1
+    quantity:1,
+    selected: true,
   },
 ]
 
