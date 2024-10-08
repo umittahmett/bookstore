@@ -1,6 +1,7 @@
-import { CreditCard, Dribbble, Facebook, Github, HelpCircle, Instagram, MapPin, Package, RotateCcw, Twitter, User } from "lucide-react";
+import { CreditCard, Dribbble, Facebook, Github, HelpCircle, Info, Instagram, LogOut, MapPin, Package, RefreshCcw, RotateCcw, Twitter, User } from "lucide-react";
 import { JobOpeningProps, NavigationLinkProps, SocialLinkProps, TimelineProps } from "~/types";
 import ExampleBannerImage from "@assets/images/examples/example-banner-image.webp";
+import { InfoCircledIcon } from "@radix-ui/react-icons";
 
 export const footerNavigation: NavigationLinkProps[] = [
   {
@@ -171,6 +172,12 @@ export const navigation = {
     { name: 'Orders', href: '/profile/orders' },
     { name: 'About Us', href: '/about-us' },
     { name: 'Store Locations', href: '/store-locations' },
+  ],
+  profileNavigation: [
+    { name: 'Orders', href: '/profile/orders',icon: Package  },
+    { name: 'User Information', href: '/profile/user-info',icon: User  },
+    { name: 'Repurchase', href: '/profile/repurchase',icon: RefreshCcw  },
+    { name: 'Help', href: '/profile/help',icon: InfoCircledIcon  },
   ],
 };
 
