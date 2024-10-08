@@ -15,7 +15,8 @@ export const action: ActionFunction = async ({ request }) => {
   // Get form data
   const formData = await request.formData();
   const productId = formData.get('productId') as string;
-  const quantity = formData.get('quantity') as string;
+  const quantity = parseInt(formData.get('quantity') as string, 10);
+
   
   // Check if product ID is provided
   if (!productId) { return json({ error: 'Product ID is required' }, { status: 400 }) }
