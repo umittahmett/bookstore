@@ -1,4 +1,6 @@
 import { useFetcher } from '@remix-run/react';
+import { isLoadingAtom } from '@utils/jotai';
+import { useSetAtom } from 'jotai';
 import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -10,12 +12,12 @@ type ResponseData = {
 
 export function useFetchAction() {
   const fetcher = useFetcher<ResponseData>();
-  const [isLoading, setLoading] = useState(false);
   const successCallback = useRef<(() => void) | null>(null);
   const errorCallback = useRef<(() => void) | null>(null);
+  const setIsLoading = useSetAtom(isLoadingAtom);
 
   const sendAction = (formData: FormData, method: 'post' | 'get' | 'put' | 'delete' = 'post', action: string, successFunction?: () => void, errorFunction?: () => void,) => {
-    setLoading(true);
+    setIsLoading(true);
     successCallback.current = successFunction || null;
     errorCallback.current = errorFunction || null;
     fetcher.submit(formData, { method, action });
@@ -27,7 +29,7 @@ export function useFetchAction() {
         successCallback.current();
         successCallback.current = null;
       }
-      setLoading(false);
+      setIsLoading(false);
       toast.success(["Success"], {
         closeButton: false,
         description: fetcher.data.message || "Success.",
@@ -39,7 +41,7 @@ export function useFetchAction() {
     }
 
     if (fetcher.state === 'idle' && fetcher.data?.error) {
-      setLoading(false);
+      setIsLoading(false);
       if (errorCallback.current) {
         errorCallback.current();
         errorCallback.current = null;
@@ -56,5 +58,5 @@ export function useFetchAction() {
   }, [fetcher.state, fetcher.data]);
 
 
-  return { sendAction, fetcher, isLoading };
+  return { sendAction, fetcher };
 }
