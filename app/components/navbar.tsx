@@ -1,19 +1,32 @@
-import { useEffect, useState } from 'react'
-import { Menu, Search, ShoppingBag, UserCircle, UserCircle2, X } from 'lucide-react'
+import { useState } from 'react'
+import { Menu, Search, ShoppingBag, UserCircle } from 'lucide-react'
 import { navigation } from '~/data'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs'
-import { Dialog, DialogContent } from './ui/dialog'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@components/ui/tabs'
+import { Dialog, DialogContent } from '@components/ui/dialog'
 import { DropdownMenu } from '@radix-ui/react-dropdown-menu'
 import { DropdownMenuContent, DropdownMenuTrigger } from './ui/dropdown-menu'
 import DarkLogo from "@assets/images/logos/dark-logo.png";
 import { AvatarIcon } from '@radix-ui/react-icons'
+import { NavbarProps } from '~/types'
+import { Input } from '@components/ui/input'
+import { Button } from '@components/ui/button'
+import { useNavigate } from '@remix-run/react'
 
-const Navbar = ({ user }: any) => {
-  const [open, setOpen] = useState(false)
+const Navbar: React.FC<NavbarProps> = ({ user, productsInCart }) => {
+  const [open, setOpen] = useState(false);
+  const [keyword, setKeyword] = useState<string>('');
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    console.log(user);
-  }, [])
+  const handleSearch = () => {
+    if (keyword.trim()) {
+      navigate(`/search?keyword=${encodeURIComponent(keyword)}`);
+    }
+  };
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setKeyword(event.target.value);
+  };
+
   return (
     <div className="bg-white">
       {/* Mobile menu */}
@@ -21,20 +34,8 @@ const Navbar = ({ user }: any) => {
         <DialogContent
           className="w-dvw lg:hidden max-h-dvh overflow-y-auto"
         >
-          <div className="flex px-4 pb-2 pt-5">
-            <button
-              type="button"
-              onClick={() => setOpen(false)}
-              className="relative -m-2 inline-flex items-center justify-center rounded-md p-2 text-zinc-400"
-            >
-              <span className="absolute -inset-0.5" />
-              <span className="sr-only">Close menu</span>
-              <X aria-hidden="true" className="h-6 w-6" />
-            </button>
-          </div>
-
           {/* Links */}
-          <Tabs className="mt-2">
+          <Tabs className="mt-12">
             <div className="border-b border-zinc-200">
               <TabsList className="-mb-px flex space-x-8 px-4">
                 {navigation.categories.map((category, index) => (
@@ -126,25 +127,24 @@ const Navbar = ({ user }: any) => {
               </div>
             </div>
           )}
-
-          <div className="border-t border-zinc-200 px-4 py-6">
-            <a href="#" className="-m-2 flex items-center p-2">
-              <img
-                alt=""
-                src="https://tailwindui.com/img/flags/flag-canada.svg"
-                className="block h-auto w-5 flex-shrink-0"
-              />
-              <span className="ml-3 block text-base font-medium text-zinc-900">CAD</span>
-              <span className="sr-only">, change currency</span>
-            </a>
-          </div>
         </DialogContent>
       </Dialog>
 
       <header className="relative bg-white border-b border-zinc-200">
-        <nav aria-label="Top" className="default-container">
+        <div className='flex items-center gap-8 flex-shrink-0 pt-2 !pr-10 default-container max-lg:hidden'>
+          {navigation.pages.map((page) => (
+            <a
+              key={page.name}
+              href={page.href}
+              className="flex items-center text-xs font-medium text-zinc-600 hover:text-zinc-800 duration-200"
+            >
+              {page.name}
+            </a>
+          ))}
+        </div>
+        <nav aria-label="Top" className="default-container pb-2">
           <div className="">
-            <div className="flex h-24 items-center">
+            <div className="flex pt-3 pb-1 items-center">
               <button
                 type="button"
                 onClick={() => setOpen(true)}
@@ -231,17 +231,34 @@ const Navbar = ({ user }: any) => {
 
                     </DropdownMenu>
                   ))}
-
-                  {navigation.pages.map((page) => (
-                    <a
-                      key={page.name}
-                      href={page.href}
-                      className="flex items-center text-sm font-medium text-zinc-700 hover:text-zinc-800 duration-200"
-                    >
-                      {page.name}
-                    </a>
-                  ))}
                 </div>
+              </div>
+
+              <div className="relative mx-8 w-full flex-1 max-lg:hidden">
+                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                  <Search aria-hidden="true" className="h-5 w-5 text-zinc-400" />
+                </div>
+                <Input
+                  id="search"
+                  name="search"
+                  type="search"
+                  placeholder="Search"
+                  className="pl-12 pr-14"
+                  onChange={handleInputChange}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter') {
+                      handleSearch();
+                    }
+                  }}
+                />
+                <div className="absolute inset-y-0 right-[7px] flex items-center pl-3">
+                  <Button className="!h-9" size="sm" onClick={handleSearch}>
+                    Search
+                  </Button>
+                </div>
+                <form onSubmit={(e) => { e.preventDefault(); handleSearch(); }} className="hidden">
+                  <input type="submit" />
+                </form>
               </div>
 
               <div className="ml-auto flex items-center">
@@ -258,26 +275,6 @@ const Navbar = ({ user }: any) => {
                   </div>
                 }
 
-                <div className="hidden lg:ml-8 lg:flex">
-                  <a href="#" className="flex items-center text-zinc-700 hover:text-zinc-800 duration-200">
-                    <img
-                      alt=""
-                      src="https://tailwindui.com/img/flags/flag-canada.svg"
-                      className="block h-auto w-5 flex-shrink-0"
-                    />
-                    <span className="ml-3 block text-sm font-medium">CAD</span>
-                    <span className="sr-only">, change currency</span>
-                  </a>
-                </div>
-
-                {/* Search */}
-                <div className="flex lg:ml-6">
-                  <a href="/search" className="p-2 text-zinc-400 hover:text-zinc-800 duration-200">
-                    <span className="sr-only">Search</span>
-                    <Search aria-hidden="true" className="h-6 w-6" />
-                  </a>
-                </div>
-
                 {/* Cart */}
                 <div className="ml-4 lg:ml-6 flex items-center gap-6">
                   <a href="/cart" className="group -m-2 flex items-center p-2">
@@ -285,7 +282,7 @@ const Navbar = ({ user }: any) => {
                       aria-hidden="true"
                       className="h-6 w-6 flex-shrink-0 text-zinc-400 group-hover:text-zinc-800 duration-200"
                     />
-                    <span className="ml-2 text-sm font-medium text-zinc-700 group-hover:text-zinc-800 duration-200">0</span>
+                    <span className="ml-2 text-sm font-medium text-zinc-700 group-hover:text-zinc-800 duration-200">{productsInCart}</span>
                     <span className="sr-only">items in cart, view bag</span>
                   </a>
 
@@ -295,6 +292,32 @@ const Navbar = ({ user }: any) => {
                 </div>
               </div>
             </div>
+          </div>
+          <div className="relative mt-2 w-full flex-1 lg:hidden">
+            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+              <Search aria-hidden="true" className="h-5 w-5 text-zinc-400" />
+            </div>
+            <Input
+              id="search"
+              name="search"
+              type="search"
+              placeholder="Search"
+              className="pl-12 pr-14"
+              onChange={handleInputChange}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter') {
+                  handleSearch();
+                }
+              }}
+            />
+            <div className="absolute inset-y-0 right-[7px] flex items-center pl-3">
+              <Button className="!h-9" size="sm" onClick={handleSearch}>
+                Search
+              </Button>
+            </div>
+            <form onSubmit={(e) => { e.preventDefault(); handleSearch(); }} className="hidden">
+              <input type="submit" />
+            </form>
           </div>
         </nav>
       </header>
