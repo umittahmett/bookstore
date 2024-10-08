@@ -10,11 +10,12 @@ import { AvatarIcon } from '@radix-ui/react-icons'
 import { NavbarProps } from '~/types'
 import { Input } from '@components/ui/input'
 import { Button } from '@components/ui/button'
-import { useNavigate } from '@remix-run/react'
+import { useNavigate, useSearchParams } from '@remix-run/react'
 
 const Navbar: React.FC<NavbarProps> = ({ user, productsInCart }) => {
   const [open, setOpen] = useState(false);
-  const [keyword, setKeyword] = useState<string>('');
+  const [searchParams] = useSearchParams();
+  const [keyword, setKeyword] = useState<string>(searchParams.get("keyword") || '');
   const navigate = useNavigate();
 
   const handleSearch = () => {
@@ -245,6 +246,7 @@ const Navbar: React.FC<NavbarProps> = ({ user, productsInCart }) => {
                   placeholder="Search"
                   className="pl-12 pr-14"
                   onChange={handleInputChange}
+                  defaultValue={keyword}
                   onKeyDown={(event) => {
                     if (event.key === 'Enter') {
                       handleSearch();
@@ -304,6 +306,7 @@ const Navbar: React.FC<NavbarProps> = ({ user, productsInCart }) => {
               placeholder="Search"
               className="pl-12 pr-14"
               onChange={handleInputChange}
+              defaultValue={keyword}
               onKeyDown={(event) => {
                 if (event.key === 'Enter') {
                   handleSearch();
