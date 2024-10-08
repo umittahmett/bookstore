@@ -14,6 +14,12 @@ import Navbar from "@components/navbar";
 import { Toaster } from "@components/ui/sonner";
 import { tokenCookie } from "@utils/cookie";
 import { verifyJWT } from "@utils/auth.server";
+import { useAtom, useAtomValue } from "jotai";
+import { isLoadingAtom } from "@utils/jotai";
+import { AnimatedCircularProgressBarDemo } from "./components/ui/progress";
+import { ObjectId } from "mongodb";
+import { JwtPayload } from "jsonwebtoken";
+import { db } from "@utils/db.server";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -30,22 +36,21 @@ export const links: LinksFunction = () => [
 
 export const loader: LoaderFunction = async ({ request }) => {
   try {
+    // Check token
     const token = await tokenCookie.parse(request.headers.get("Cookie"));
+    if (!token) { return json({ user: null }) }
+    const user = verifyJWT(token) as JwtPayload
+    if (!user) { return json({ user: null }) }
 
-    if (!token) {
-      console.log("Token bulunamadı, kullanıcı login değil.");
-      return json({ user: null });
+    // get user cart products length
+    const userCart = await db.collection('carts').findOne({ _id: new ObjectId(user.cartId as string) })
+    let productsInCart: number = 0
+    if (userCart) {
+      userCart.products.map((product: any) => {
+        productsInCart += product.quantity
+      })
     }
-
-    const user = verifyJWT(token);
-
-    if (!user) {
-      console.log("Token geçersiz veya süresi dolmuş.");
-      return json({ user: null });
-    }
-
-    console.log("User bulundu:", user);
-    return json({ user });
+    return json({ user, productsInCart });
   } catch (error) {
     console.error("Loader sırasında bir hata oluştu:", error);
     throw new Error("Sunucu hatası: Kullanıcı doğrulama işlemi başarısız.");
@@ -54,6 +59,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const loaderData = useLoaderData<typeof loader>();
+  const isLoading = useAtomValue(isLoadingAtom);
   return (
     <html lang="en">
       <head>
@@ -63,12 +69,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        <Navbar user={loaderData.user} />
+        <Navbar productsInCart={loaderData.productsInCart} user={loaderData.user} />
         {children}
         <Footer />
         <ScrollRestoration />
         <Scripts />
         <Toaster />
+        {isLoading && (
+          <div className='fixed top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.5)] z-50 flex justify-center items-center'>
+            <AnimatedCircularProgressBarDemo isLoading={isLoading} />
+          </div>
+        )}
       </body>
     </html>
   );
