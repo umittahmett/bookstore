@@ -168,6 +168,7 @@ export const navigation = {
     },
   ],
   pages: [
+    { name: 'Orders', href: '/profile/orders' },
     { name: 'About Us', href: '/about-us' },
     { name: 'Store Locations', href: '/store-locations' },
   ],
