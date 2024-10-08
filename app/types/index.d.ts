@@ -64,7 +64,7 @@ export interface MobileFilterProps {
 }
 export interface BookSearchProps {
   onFilterClick: () => void;
-  hideFilter?: boolean;
+  productsCount: number;
 }
 export interface SortByProps {
   id: string;
@@ -137,4 +137,9 @@ export interface CounterProps {
   reduce: () => void;
   increase: () => void;
   count?: number;
+}
+
+export interface NavbarProps{
+  user: any;
+  productsInCart: number;
 }
