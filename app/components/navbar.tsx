@@ -1,10 +1,10 @@
 import { useState } from 'react'
-import { Menu, Search, ShoppingBag, UserCircle } from 'lucide-react'
+import { LogOut, Menu, Search, ShoppingBag, UserCircle } from 'lucide-react'
 import { navigation } from '~/data'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@components/ui/tabs'
 import { Dialog, DialogContent } from '@components/ui/dialog'
 import { DropdownMenu } from '@radix-ui/react-dropdown-menu'
-import { DropdownMenuContent, DropdownMenuTrigger } from './ui/dropdown-menu'
+import { DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from './ui/dropdown-menu'
 import DarkLogo from "@assets/images/logos/dark-logo.png";
 import { AvatarIcon } from '@radix-ui/react-icons'
 import { NavbarProps } from '~/types'
@@ -14,6 +14,7 @@ import { useNavigate, useSearchParams } from '@remix-run/react'
 
 const Navbar: React.FC<NavbarProps> = ({ user, productsInCart }) => {
   const [open, setOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
   const [searchParams] = useSearchParams();
   const [keyword, setKeyword] = useState<string>(searchParams.get("keyword") || '');
   const navigate = useNavigate();
@@ -288,9 +289,52 @@ const Navbar: React.FC<NavbarProps> = ({ user, productsInCart }) => {
                     <span className="sr-only">items in cart, view bag</span>
                   </a>
 
-                  <a href="/profile/orders" className='group p-2 pl-0'>
-                    <UserCircle className='size-6 group-hover:text-zinc-800 duration-200 text-zinc-400' />
-                  </a>
+                  <DropdownMenu open={profileOpen} onOpenChange={setProfileOpen} >
+                    <DropdownMenuTrigger>
+                      <button className='p-2 pl-0'>
+                        <UserCircle className='size-6 group-hover:text-zinc-800 duration-200 text-zinc-400' />
+                      </button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-56">
+                      {user ?
+                        (
+                          <div>
+                            {
+                              navigation.profileNavigation.map((item, index) => (
+                                <DropdownMenuItem key={index} className='p-0'>
+                                  <a href={item.href} className='flex items-center gap-2 justify-start p-2.5 cursor-pointer'>
+                                    <item.icon className='size-5' />
+                                    {item.name}
+                                  </a>
+
+                                </DropdownMenuItem>
+                              ))
+                            }
+                            <DropdownMenuItem className='p-0 bg-zinc-50 -m-1 -mt-0'>
+                              <a href="/api/logout" className='flex items-center text-amber-500 gap-2 justify-start p-3.5 cursor-pointer'>
+                                <LogOut className='size-5 rotate-180' />
+                                Log out
+                              </a>
+                            </DropdownMenuItem>
+                          </div>
+
+                        )
+                        :
+                        <div className='flex flex-col gap-1'>
+                          <a href="/auth/login">
+                            <Button size="md" className="w-full">
+                              Login
+                            </Button>
+                          </a>
+                          <a href="/auth/register" className=''>
+                            <Button size="md" variant='outline' className="w-full">
+                              Create an account
+                            </Button>
+                          </a>
+                        </div>
+                      }
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </div>
               </div>
             </div>
@@ -324,7 +368,7 @@ const Navbar: React.FC<NavbarProps> = ({ user, productsInCart }) => {
           </div>
         </nav>
       </header>
-    </div>
+    </div >
   )
 }
 
