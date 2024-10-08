@@ -9,7 +9,7 @@ const ProductList: React.FC<ProductListProps> = ({ products }) => {
   const keyword = searchParams.get('keyword')
   return (
     products.length > 0 ?
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 w-full">
+      <div className="grid justify-between grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 w-full">
         {products.map((product: BookProps, index: number) => (
           <BookCard key={index} {...product} />
         ))

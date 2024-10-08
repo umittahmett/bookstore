@@ -79,18 +79,18 @@ const ProjectList = () => {
   }
 
   return (
-    <div className="default-container pb-16 w-full relative mt-10 grid grid-cols-12 gap-6">
+    <div className="default-container pb-16 w-full relative mt-10 grid gird-cols-1 lg:grid-cols-12 gap-6">
       {/* Filters */}
-      <div className="max-xl:col-span-4 xl:col-span-3 max-lg:hidden">
+      <div className="col-span-4 xl:col-span-3 max-lg:hidden">
         {products.length > 0 && <SidebarFilter maxPriceRange={getMinMaxPriceRange().maxPriceRange} minPriceRange={getMinMaxPriceRange().minPriceRange} />}
       </div>
 
       {/* Search */}
-      <div className="col-span-full xl:col-span-9 lg:col-span-8">
-        <BookSearch onFilterClick={() => setIsMobileFilterOpen(true)} />
+      <div className="col-span-8 xl:col-span-9 ">
+        <BookSearch productsCount={products.length} onFilterClick={() => setIsMobileFilterOpen(true)} />
         <div className="flex flex-col space-y-5 mt-5">
           <Suspense fallback={
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 w-full">
+            <div className="grid gap-5 w-full">
               <BookCardSkeleton />
             </div>
           }>

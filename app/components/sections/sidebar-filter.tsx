@@ -1,18 +1,15 @@
-// Components
-import { ChevronDown, Filter, LayoutGrid, Wrench } from "lucide-react";
+import { ChevronDown, LayoutGrid } from "lucide-react";
 import { Accordion, AccordionContent } from "@components/ui/accordion";
 import { AccordionItem, AccordionTrigger } from "@radix-ui/react-accordion";
 import { Checkbox } from "@components/ui/checkbox";
 import { Label } from "@components/ui/label";
-// Types
 import { FilterCategory, SidebarFilterProps } from "~/types";
-// Data
 import { bookFilters } from "@data/filters";
 import { useSearchParams } from "@remix-run/react";
 import React, { useState } from "react";
-import { DualRangeSlider } from "../ui/dual-range-slider";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
+import { DualRangeSlider } from "@components/ui/dual-range-slider";
+import { Input } from "@components/ui/input";
+import { Button } from "@components/ui/button";
 
 const SidebarFilter: React.FC<SidebarFilterProps> = ({ maxPriceRange, minPriceRange }) => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -46,7 +43,6 @@ const SidebarFilter: React.FC<SidebarFilterProps> = ({ maxPriceRange, minPriceRa
     setSearchParams(params);
   };
 
-
   // Handle price range change
   const handlePriceRangeChange = (range: any) => {
     setPriceRange(range);
@@ -65,7 +61,7 @@ const SidebarFilter: React.FC<SidebarFilterProps> = ({ maxPriceRange, minPriceRa
           <LayoutGrid className="size-4" />
           Customize Your Result
         </h2>
-        <Accordion type="multiple" className="w-full divide-y divide-slate-200">
+        <Accordion defaultChecked={true} defaultValue={['Genre']} type="multiple" className="w-full divide-y divide-slate-200">
           {bookFilters.map((item, index) => (
             <AccordionItem
               className="w-full py-4"
