@@ -14,11 +14,10 @@ const Hero = () => {
       <div className="relative mx-auto max-w-7xl px-4 sm:static sm:px-6 lg:px-8">
         <div className="sm:max-w-lg">
           <h1 className="text-4xl font-bold tracking-tight text-zinc-900 sm:text-6xl">
-            Summer styles are finally here
+            Discover Timeless Classics
           </h1>
           <p className="mt-4 text-xl text-zinc-500">
-            This year, our new summer collection will shelter you from the harsh elements of a world that doesn't
-            care if you live or die.
+            Dive into the world of literature with our carefully curated selection of timeless masterpieces. Whether you're seeking adventure, profound reflections, or transformative tales, our collection has something for every reader.
           </p>
         </div>
 
@@ -90,7 +89,7 @@ const Hero = () => {
               </div>
             </div>
 
-            <a href="/search"><Button>Shop Now <ArrowRight className="size-5" /></Button></a>
+            <a href="/"><Button>Shop Now <ArrowRight className="size-5" /></Button></a>
           </div>
         </div>
       </div>
