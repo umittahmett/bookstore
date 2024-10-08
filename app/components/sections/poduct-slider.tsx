@@ -41,21 +41,25 @@ const ProductSlider: React.FC<ProductSliderProps> = ({ title, browseAllText, bro
             <a href={browseAllLink} className="hidden text-sm font-semibold text-amber-500 hover:text-amber-600 duration-200 sm:block">
               {browseAllText}
               <span aria-hidden="true"> &rarr;</span>
-            </a>}
+            </a>
+          }
         </div>
 
-        <div ref={sliderRef} className="mt-6 lg:pb-2 hide-scroll grid grid-flow-col-dense gap-6 overflow-x-auto">
+        <div ref={sliderRef} className="mt-6 lg:pb-2 hide-scroll grid grid-flow-col-dense gap-6 overflow-x-auto max-md:*:w-48 *:w-56">
           {books.map((book) => (
             <BookCard key={book._id?.toString()} {...book} />
           ))}
         </div>
 
-        <div className="mt-6 sm:hidden">
-          <a href={browseAllLink} className="block text-sm font-semibold text-amber-600 hover:text-amber-500">
-            {browseAllText}
-            <span aria-hidden="true"> &rarr;</span>
-          </a>
-        </div>
+        {
+          browseAllText &&
+          <div className="mt-6 sm:hidden">
+            <a href={browseAllLink} className="block text-sm font-semibold text-amber-600 hover:text-amber-500">
+              {browseAllText}
+              <span aria-hidden="true"> &rarr;</span>
+            </a>
+          </div>
+        }
 
         {/* Navigation */}
         <div className='lg:flex items-center gap-2.5 justify-end absolute bottom-0 right-8 hidden'>
