@@ -8,19 +8,26 @@ import { Textarea } from "@components/ui/textarea"
 import { addresses, books } from '@data/dummy'
 import SavedAddressCard from '@components/cards/saved-address-card'
 import AddressesPopup from '@components/popups/addresses-popup'
-import { AddressProps } from '~/types'
+import { AddressProps, CartProductProps, CartProps } from '~/types'
 import clsx from 'clsx'
+import { json, LoaderFunction, redirect } from '@remix-run/node'
+import { tokenCookie } from '@utils/cookie'
+import { verifyJWT } from '@utils/auth.server'
+import { JwtPayload } from 'jsonwebtoken'
+import { db } from '@utils/db.server'
+import { ObjectId } from 'mongodb'
+import { useLoaderData } from '@remix-run/react'
 
 export default function CheckoutPage() {
+  const loaderData = useLoaderData<typeof loader>();
+  const products = loaderData.products;
   const [couponCode, setCouponCode] = useState('')
-  const handleApplyCoupon = () => {
-    console.log('Applying coupon:', couponCode)
-  }
+
   const calculateTotal = () => {
-    return books.reduce((total, book) => total + book.price * book.stockQuantity, 0).toFixed(2)
+    return products.reduce((total: number, book: CartProductProps) => total + book.price * book.quantity, 0).toFixed(2)
   }
   const calculateSubtotal = () => {
-    return books.reduce((total, book) => total + book.price * book.stockQuantity, 0).toFixed(2)
+    return products.reduce((total: number, book: CartProductProps) => total + book.price * book.quantity, 0).toFixed(2)
   }
   const [selectedAddress, setSelectedAddress] = useState<AddressProps | null>(null)
 
@@ -108,7 +115,7 @@ export default function CheckoutPage() {
                 onChange={(e) => setCouponCode(e.target.value)}
                 className="flex-grow"
               />
-              <Button onClick={handleApplyCoupon} >Apply Code</Button>
+              <Button>Apply Code</Button>
             </div>
           </div>
         </div>
@@ -124,7 +131,7 @@ export default function CheckoutPage() {
               </div>
 
               {/* Books */}
-              {books.map((book) => (
+              {products.map((book: CartProductProps) => (
                 <div key={book._id.toString()} className="flex justify-between items-center py-2 border-b">
                   <div className="flex items-center space-x-2">
                     <div className='size-20 rounded-lg bg-zinc-100 flex p-2 items-center justify-center'>
@@ -133,10 +140,10 @@ export default function CheckoutPage() {
                     <div>
                       <p className="font-medium">{book.title}</p>
                       <p className="text-sm text-zinc-600">{book.author}</p>
-                      <p className="text-sm text-zinc-600">Qty: {book.stockQuantity}</p>
+                      <p className="text-sm text-zinc-600">Qty: {book.quantity}</p>
                     </div>
                   </div>
-                  <span className="font-medium">${(book.price * book.stockQuantity).toFixed(2)}</span>
+                  <span className="font-medium">${(book.price * book.quantity).toFixed(2)}</span>
                 </div>
               ))}
 
@@ -148,15 +155,19 @@ export default function CheckoutPage() {
                 </div>
                 <div className="flex justify-between text-sm">
                   <span>Shipping Cost (+)</span>
-                  <span className="font-medium">$10.85</span>
+                  <span className="font-medium">$5</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span>Discount (-)</span>
-                  <span className="font-medium">$9.00</span>
+                  <span className="font-medium">$0</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span>Tax (+)</span>
+                  <span className="font-medium">$3</span>
                 </div>
                 <div className="flex justify-between font-semibold text-lg pt-4 border-t">
                   <span>Total Payable</span>
-                  <span>${(parseFloat(calculateTotal()) + 10.85 - 9).toFixed(2)}</span>
+                  <span>${(parseFloat(calculateTotal()) + 8).toFixed(2)}</span>
                 </div>
               </div>
             </div>
@@ -168,3 +179,41 @@ export default function CheckoutPage() {
     </div>
   )
 }
+
+// Loader function to get user cart and products
+export const loader: LoaderFunction = async ({ request }) => {
+  try {
+    // Check token
+    const token = await tokenCookie.parse(request.headers.get("Cookie"));
+    if (!token) { return redirect("/auth/login") }
+    const user = verifyJWT(token) as JwtPayload;
+    if (!user) { return redirect("/auth/login") }
+
+    // Get user cart
+    const userCart = await db.collection('carts').findOne({ _id: new ObjectId(user.cartId as string) });
+
+    // Check if cart exists
+    if (!userCart) {
+      return json({ error: 'Cart not found' }, { status: 404 });
+    }
+
+    // Get Products in cart
+    const productsToCheckout = await db.collection('products').find({
+      _id: { $in: userCart.products.filter((item: CartProps) => item.selected).map((product: any) => new ObjectId(product.productId as string)) }
+    }).toArray()
+
+    const products = productsToCheckout.map(product => {
+      const checkoutProduct = userCart.products.find((p: any) => p.productId === product._id.toString());
+      return {
+        ...product,
+        quantity: checkoutProduct?.quantity || 1,
+        selected: checkoutProduct?.selected || false
+      };
+    });
+
+    return json({ products });
+  } catch (error) {
+    console.error("Loader sırasında bir hata oluştu:", error);
+    throw new Error("Sunucu hatası: Kullanıcı doğrulama işlemi başarısız.");
+  }
+};
