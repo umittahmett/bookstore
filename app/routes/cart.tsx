@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { Suspense, useState } from 'react'
 import { ArrowRight, ShoppingBag, Trash2 } from 'lucide-react'
 import { Checkbox } from '@components/ui/checkbox'
 import { Button } from '@components/ui/button'
@@ -16,7 +16,7 @@ import { useFetchAction } from '@hooks/use-global-submit'
 const Cart: React.FC = () => {
   const userCart = useLoaderData<typeof loader>();
   const [cartItems, setCartItems] = useState<CartProductProps[]>(userCart.products);
-  const { sendAction, isLoading } = useFetchAction();
+  const { sendAction } = useFetchAction();
 
   // Toggle select status of a product
   const handleToggleSelect = (productId: string) => {
@@ -76,83 +76,87 @@ const Cart: React.FC = () => {
 
   return (
     cartItems.length > 0 ?
-      <div className="default-container flex items-start gap-10 py-10">
-        <div>
-          {/* Cart Header */}
-          <div className="flex justify-between items-center mb-6">
-            <h1 className="text-2xl font-bold">Your Cart</h1>
-            <span className="text-zinc-600">{cartItems.length} Items in cart</span>
-          </div>
+      <Suspense fallback={<div>Loading...</div>}>
+        <div className="default-container flex items-start gap-10 py-10">
+          <div>
+            {/* Cart Header */}
+            <div className="flex justify-between items-center mb-6">
+              <h1 className="text-2xl font-bold">Your Cart</h1>
+              <span className="text-zinc-600">{cartItems.length} Items in cart</span>
+            </div>
 
-          {/* Cart Items */}
-          <div className="space-y-4">
-            {cartItems.map((item) => (
-              <div key={item._id.toString()} className="flex relative items-center space-x-4 py-4 border-b">
-                <Checkbox
-                  id={`product-${item._id}`}
-                  defaultChecked={item.selected}
-                  onCheckedChange={() => handleToggleSelect(item._id.toString())}
-                />
-
-                <div className='size-28 flex-shrink-0 rounded-lg bg-zinc-100 flex p-2 items-center justify-center'>
-                  <img src={item.images[0]} alt={item.title} className="h-full w-fit object-contain" />
-                </div>
-
-                <div className="flex-grow">
-                  <h3 className="font-semibold">{item.title}</h3>
-                  <p className="text-zinc-600 line-clamp-2">{item.description}</p>
-                </div>
-                <Button variant="ghost" className='size-auto hover:text-zinc-700 text-xs hover:bg-white absolute top-0 right-0 text-zinc-500' size="icon"
-                  onClick={() => handleDeleteProduct(item._id.toString())}
-                >
-                  <Trash2 className="size-4" />
-                  Delete
-                </Button>
-                <div className='flex items-center gap-10'>
-                  <Counter
-                    reduce={() => item.quantity > 1 && handleUpdateQuantity(item._id.toString(), Number(item.quantity) - 1)}
-                    increase={() => handleUpdateQuantity(item._id.toString(), Number(item.quantity) + 1)}
-                    count={item.quantity}
-                    onChange={(e: any) => handleUpdateQuantity(item._id.toString(), Number(e.target.value))}
+            {/* Cart Items */}
+            <div className="space-y-4">
+              {cartItems.map((item) => (
+                <div key={item._id.toString()} className="flex relative items-center space-x-4 py-4 border-b">
+                  <Checkbox
+                    id={`product-${item._id}`}
+                    defaultChecked={item.selected}
+                    onCheckedChange={() => handleToggleSelect(item._id.toString())}
                   />
-                  <span className="font-semibold">${item.price.toFixed(2)}</span>
+
+                  <div className='size-28 flex-shrink-0 rounded-lg bg-zinc-100 flex p-2 items-center justify-center'>
+                    <img src={item.images[0]} alt={item.title} className="h-full w-fit object-contain" />
+                  </div>
+
+                  <div className="flex-grow">
+                    <h3 className="font-semibold">{item.title}</h3>
+                    <p className="text-zinc-600 line-clamp-2">{item.description}</p>
+                  </div>
+                  <Button variant="ghost" className='size-auto hover:text-zinc-700 text-xs hover:bg-white absolute top-0 right-0 text-zinc-500' size="icon"
+                    onClick={() => handleDeleteProduct(item._id.toString())}
+                  >
+                    <Trash2 className="size-4" />
+                    Delete
+                  </Button>
+                  <div className='flex items-center gap-10'>
+                    <Counter
+                      reduce={() => item.quantity > 1 && handleUpdateQuantity(item._id.toString(), Number(item.quantity) - 1)}
+                      increase={() => handleUpdateQuantity(item._id.toString(), Number(item.quantity) + 1)}
+                      count={item.quantity}
+                      onChange={(e: any) => handleUpdateQuantity(item._id.toString(), Number(e.target.value))}
+                    />
+                    <span className="font-semibold">${item.price.toFixed(2)}</span>
+                  </div>
+
                 </div>
+              ))}
+            </div>
+          </div>
 
+          {/* Cart Summary */}
+          <div className='bg-zinc-50 p-6 rounded-xl sticky top-10'>
+            <div className="*:py-4 divide-zinc-200 divide-y ">
+              <div className="flex justify-between">
+                <span>Subtotal</span>
+                <span>${subtotal.toFixed(2)}</span>
               </div>
-            ))}
+              <div className="flex justify-between">
+                <span>Tax</span>
+                <span>${tax.toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Shipping</span>
+                <span>${shipping.toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between font-semibold text-lg">
+                <span>Total</span>
+                <span>${total.toFixed(2)}</span>
+              </div>
+            </div>
+            <div className="mt-8">
+              <a aria-disabled={total === 0} href="/checkout">
+                <Button className='w-full mb-2.5'>
+                  Confirm payment
+                </Button>
+              </a>
+              <a href="/">
+                <Button variant="outline" className="w-full">Continue Shopping</Button>
+              </a>
+            </div>
           </div>
         </div>
-
-        {/* Cart Summary */}
-        <div className='bg-zinc-50 p-6 rounded-xl sticky top-10'>
-          <div className="*:py-4 divide-zinc-200 divide-y ">
-            <div className="flex justify-between">
-              <span>Subtotal</span>
-              <span>${subtotal.toFixed(2)}</span>
-            </div>
-            <div className="flex justify-between">
-              <span>Tax</span>
-              <span>${tax.toFixed(2)}</span>
-            </div>
-            <div className="flex justify-between">
-              <span>Shipping</span>
-              <span>${shipping.toFixed(2)}</span>
-            </div>
-            <div className="flex justify-between font-semibold text-lg">
-              <span>Total</span>
-              <span>${total.toFixed(2)}</span>
-            </div>
-          </div>
-          <div className="mt-8">
-            <Button className='w-full mb-2.5' disabled={total === 0}>
-              Confirm payment
-            </Button>
-            <a href="/">
-              <Button variant="outline" className="w-full">Continue Shopping</Button>
-            </a>
-          </div>
-        </div>
-      </div>
+      </Suspense>
       :
       // Empty Cart Message
       <div className='flex justify-center items-center flex-col h-[40vh]'>
