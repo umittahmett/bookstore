@@ -1,34 +1,30 @@
 import { useState } from 'react'
-import { Star, ChevronDown, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react'
+import { Facebook, Twitter, Instagram, Linkedin, ShoppingBag } from 'lucide-react'
 import { Button } from "@components/ui/button"
-import { Badge } from "@components/ui/badge"
-import { BookProps } from '~/types';
-import { books } from '~/data/dummy';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@components/ui/accordion';
 import ProductSlider from '@components/sections/poduct-slider';
 import { Card, CardContent } from '@components/ui/card';
 import { Separator } from '@radix-ui/react-select';
-
-interface BookDetails {
-  id: string;
-  title: string;
-  author: string;
-  rating: number;
-  reviewCount: number;
-  description: string;
-  images: string[];
-  formats: string[];
-  editions: string[];
-  price: number;
-  isbn: string;
-  publisher: string;
-  publicationDate: string;
-  pages: number;
-  language: string;
-}
+import { db } from '@utils/db.server';
+import { ObjectId } from 'mongodb';
+import { json, LoaderFunction } from '@remix-run/node';
+import { useLoaderData } from '@remix-run/react';
+import { useFetchAction } from '~/hooks/use-global-submit'
 
 export default function BookDetailPage() {
   const [selectedImage, setSelectedImage] = useState(0)
+  const loaderData = useLoaderData<typeof loader>()
+  const product = loaderData.product
+  const similarProducts = loaderData.similarProducts
+  const { sendAction } = useFetchAction()
+
+  // Add product to cart
+  const handleAddToCart = () => {
+    const formData = new FormData();
+    formData.append('productId', product._id.toString());
+    formData.append('quantity', '1');
+    sendAction(formData, 'post', '/api/cart/add-product');
+  };
 
   return (
     <div className="pt-10">
@@ -36,8 +32,8 @@ export default function BookDetailPage() {
         <div className="space-y-4">
           <div className="relative bg-zinc-100 p-5 rounded-lg flex items-center justify-center  w-full">
             <img
-              src={books[3].images[selectedImage]}
-              alt={books[3].title}
+              src={product.images[selectedImage]}
+              alt={product.title}
               className="rounded-lg object-cover"
             />
             <div className="absolute top-4 right-4 bg-white px-2 py-1 rounded text-sm font-medium">
@@ -45,7 +41,7 @@ export default function BookDetailPage() {
             </div>
           </div>
           <div className="flex space-x-4">
-            {books[3].images.map((image, index) => (
+            {product.images.map((image: string, index: number) => (
               <button
                 key={index}
                 className={`relative aspect-[3/4] w-24 ${selectedImage === index ? 'ring-2 ring-primary' : ''}`}
@@ -53,7 +49,7 @@ export default function BookDetailPage() {
               >
                 <img
                   src={image}
-                  alt={`${books[3].title} - Image ${index + 1}`}
+                  alt={`${product.title} - Image ${index + 1}`}
                   className="rounded object-cover"
                 />
               </button>
@@ -62,15 +58,15 @@ export default function BookDetailPage() {
         </div>
         <div className="space-y-6 pt-5">
           <div>
-            <h1 className="text-3xl font-bold">{books[3].title}</h1>
-            <p className="text-sm">by {books[3].author}</p>
+            <h1 className="text-3xl font-bold">{product.title}</h1>
+            <p className="text-sm">by {product.author}</p>
             <div className="flex items-center space-x-2 mt-2">
-              <span className="text-sm"><span className='text-green-500'>{books[3].reviewCount}</span> reviews</span>
+              <span className="text-sm"><span className='text-green-500'>{product.reviewCount}</span> reviews</span>
             </div>
           </div>
-          <p className="text-muted-foreground">{books[3].description}</p>
-          <div className="text-3xl font-bold">${books[3].price.toFixed(2)}</div>
-          <Button className="w-full">Add to Cart</Button>
+          <p className="text-muted-foreground">{product.description}</p>
+          <div className="text-3xl font-bold">${product.price.toFixed(2)}</div>
+          <Button onClick={handleAddToCart} className='w-full sticky mt-6'> <ShoppingBag strokeWidth={1} className='text-white size-5' /> Add to cart</Button>
           <Accordion defaultValue={['shipping-returns']} type="multiple">
             <AccordionItem value="shipping-returns">
               <AccordionTrigger className="flex justify-between items-center">
@@ -96,35 +92,60 @@ export default function BookDetailPage() {
       <Card className="mb-12 default-container py-10 !border-x-0 mt-10 !rounded-none !px-0 !border-y">
         <CardContent className="p-6">
           <h2 className="text-2xl font-bold mb-4">About this book</h2>
-          <p className="text-muted-foreground mb-6">{books[3].longDescription}</p>
+          <p className="text-muted-foreground mb-6">{product.longDescription}</p>
           <Separator className="my-6" />
           <h3 className="text-xl font-semibold mb-4">Product details</h3>
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div>
               <p className="font-semibold">ISBN</p>
-              <p className="text-muted-foreground">{books[3].isbn}</p>
+              <p className="text-muted-foreground">{product.isbn}</p>
             </div>
             <div>
               <p className="font-semibold">Publisher</p>
-              <p className="text-muted-foreground">{books[3].publisher}</p>
+              <p className="text-muted-foreground">{product.publisher}</p>
             </div>
             <div>
               <p className="font-semibold">Publication Date</p>
-              <p className="text-muted-foreground">{books[3].publicationDate}</p>
+              <p className="text-muted-foreground">{product.publicationDate}</p>
             </div>
             <div>
               <p className="font-semibold">Pages</p>
-              <p className="text-muted-foreground">{books[3].pages}</p>
+              <p className="text-muted-foreground">{product.pages}</p>
             </div>
             <div>
               <p className="font-semibold">Language</p>
-              <p className="text-muted-foreground">{books[3].language}</p>
+              <p className="text-muted-foreground">{product.language}</p>
             </div>
           </div>
         </CardContent>
       </Card>
 
-      <ProductSlider className='pt-0' title='Similar Books' books={books} />
+      <ProductSlider className='pt-0' title='Similar Books' books={similarProducts} />
     </div>
   )
 }
+
+// Loader function
+export const loader: LoaderFunction = async ({ params }) => {
+  try {
+    // Get product id
+    const productId = params.product
+    console.log('product id', productId);
+
+    // get product
+    const product = await db.collection('products').findOne({ _id: new ObjectId(productId as string) })
+
+    // Check if product exist
+    if (!product) { return json({ error: 'Cart not found' }, { status: 404 }) }
+
+    const productGenre = product.genre
+
+    // Get similar products
+    const similarProducts = await db.collection('products').find({ genre: productGenre }).limit(4).toArray() || []
+
+    return json({ product, similarProducts })
+  } catch (error) {
+    console.error("Loader sırasında bir hata oluştu:", error);
+    throw new Error("Sunucu hatası: Kullanıcı doğrulama işlemi başarısız.");
+  }
+};
