@@ -4,14 +4,13 @@ import { AccordionItem, AccordionTrigger } from "@radix-ui/react-accordion";
 import { Checkbox } from "@components/ui/checkbox";
 import { Label } from "@components/ui/label";
 import { FilterCategory, SidebarFilterProps } from "~/types";
-import { bookFilters } from "@data/filters";
 import { useSearchParams } from "@remix-run/react";
 import React, { useState } from "react";
 import { DualRangeSlider } from "@components/ui/dual-range-slider";
 import { Input } from "@components/ui/input";
 import { Button } from "@components/ui/button";
 
-const SidebarFilter: React.FC<SidebarFilterProps> = ({ maxPriceRange, minPriceRange }) => {
+const SidebarFilter: React.FC<SidebarFilterProps> = ({ maxPriceRange, minPriceRange, filters }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [priceRange, setPriceRange] = useState([maxPriceRange, minPriceRange]);
 
@@ -62,7 +61,7 @@ const SidebarFilter: React.FC<SidebarFilterProps> = ({ maxPriceRange, minPriceRa
           Customize Your Result
         </h2>
         <Accordion defaultChecked={true} defaultValue={['Genre']} type="multiple" className="w-full divide-y divide-slate-200">
-          {bookFilters.map((item, index) => (
+          {filters.map((item, index) => (
             <AccordionItem
               className="w-full py-4"
               key={index}

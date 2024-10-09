@@ -3,59 +3,17 @@ import SidebarFilter from "@components/sections/sidebar-filter";
 import BookSearch from "@components/sections/book-search";
 import { Suspense, useEffect, useState } from "react";
 import { mongodb } from "@utils/db.server";
-import { useLoaderData, useSearchParams } from "@remix-run/react";
-import { BookProps } from "~/types";
+import { useLoaderData } from "@remix-run/react";
+import { BookProps, FilterCategory } from "~/types";
 import ProductList from "@components/sections/product-list";
 import BookCardSkeleton from "@components/skeletons/book-card-skeleton";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@components/ui/pagination";
 import { LoaderFunction, json } from "@remix-run/node";
 
-// Server action
-export const loader: LoaderFunction = async ({ request }) => {
-  const url = new URL(request.url);
-  const keyword = url.searchParams.get("keyword") || "";
-  const author = url.searchParams.get("author")?.split(',');
-  const genre = url.searchParams.get("genre")?.split(',');
-  const language = url.searchParams.get("language")?.split(',');
-  const minPrice = url.searchParams.get("minPrice");
-  const maxPrice = url.searchParams.get("maxPrice");
-  const db = mongodb.db('bookstore');
-  const collection = db.collection('products');
-  const query: any = {};
-
-  if (keyword) {
-    query.$or = [
-      { title: { $regex: keyword, $options: "i" } },
-      { description: { $regex: keyword, $options: "i" } }
-    ];
-  }
-
-  // Filter by author
-  if (author) { query.author = { $in: author } }
-
-  // Filter by genre
-  if (genre) { query.genre = { $in: genre } }
-
-  // Filter by language
-  if (language) { query.language = { $in: language } }
-
-  // Filter by price (min and/or max)
-  if (minPrice || maxPrice) {
-    query.price = {};
-    if (minPrice) {
-      query.price.$gte = parseFloat(minPrice);
-    }
-    if (maxPrice) {
-      query.price.$lte = parseFloat(maxPrice);
-    }
-  }
-
-  const products = await collection.find(query).toArray();
-  return json(products);
-};
-
 const ProjectList = () => {
-  const products = useLoaderData<BookProps[]>();
+  const loaderData = useLoaderData<typeof loader>();
+  const products = loaderData.products
+  const filters = loaderData.filters
   const totalPages = Array.from({ length: 10 }, (_, i) => i + 1);
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState<boolean>(false);
 
@@ -72,7 +30,7 @@ const ProjectList = () => {
 
   // Get the min and max price range
   const getMinMaxPriceRange = () => {
-    const prices = products.map((product) => product.price);
+    const prices = products.map((product: BookProps) => product.price);
     const minPriceRange = Math.min(...prices);
     const maxPriceRange = Math.max(...prices);
     return { minPriceRange, maxPriceRange };
@@ -82,7 +40,7 @@ const ProjectList = () => {
     <div className="default-container pb-16 w-full relative mt-10 grid gird-cols-1 lg:grid-cols-12 gap-6">
       {/* Filters */}
       <div className="col-span-4 xl:col-span-3 max-lg:hidden">
-        {products.length > 0 && <SidebarFilter maxPriceRange={getMinMaxPriceRange().maxPriceRange} minPriceRange={getMinMaxPriceRange().minPriceRange} />}
+        {products.length > 0 && <SidebarFilter filters={filters} maxPriceRange={getMinMaxPriceRange().maxPriceRange} minPriceRange={getMinMaxPriceRange().minPriceRange} />}
       </div>
 
       {/* Search */}
@@ -128,3 +86,65 @@ const ProjectList = () => {
 };
 
 export default ProjectList;
+
+
+// Server action
+export const loader: LoaderFunction = async ({ request }) => {
+  const url = new URL(request.url);
+  const keyword = url.searchParams.get("keyword") || "";
+  const author = url.searchParams.get("author")?.split(',');
+  const genre = url.searchParams.get("genre")?.split(',');
+  const language = url.searchParams.get("language")?.split(',');
+  const minPrice = url.searchParams.get("minPrice");
+  const maxPrice = url.searchParams.get("maxPrice");
+  const db = mongodb.db('bookstore');
+  const collection = db.collection('products');
+  const query: any = {};
+
+  if (keyword) {
+    query.$or = [
+      { title: { $regex: keyword, $options: "i" } },
+      { description: { $regex: keyword, $options: "i" } }
+    ];
+  }
+
+  const filteredProductsByKeyword = await collection.find(query).toArray();
+
+  // Get unique authors and languages
+  let authors: FilterCategory[] = [];
+  let languages: FilterCategory[] = [];
+  let genres: FilterCategory[] = [];
+
+  filteredProductsByKeyword.map((product: any) => { !authors.includes(product.author) && authors.push({ name: product.author }) })
+  filteredProductsByKeyword.map((product: any) => { !languages.includes(product.language) && languages.push({ name: product.language }) })
+  filteredProductsByKeyword.map((product: any) => { !languages.includes(product.genre) && genres.push({ name: product.genre }) })
+
+  const filters = [
+    { name: "Genre", subCategories: [...genres] },
+    { name: "Author", subCategories: [...authors] },
+    { name: "Language", subCategories: [...languages] },
+  ]
+
+  // Filter by author
+  if (author) { query.author = { $in: author } }
+
+  // Filter by genre
+  if (genre) { query.genre = { $in: genre } }
+
+  // Filter by language
+  if (language) { query.language = { $in: language } }
+
+  // Filter by price (min and/or max)
+  if (minPrice || maxPrice) {
+    query.price = {};
+    if (minPrice) {
+      query.price.$gte = parseFloat(minPrice);
+    }
+    if (maxPrice) {
+      query.price.$lte = parseFloat(maxPrice);
+    }
+  }
+
+  const products = await collection.find(query).toArray();
+  return json({ products, filters });
+};

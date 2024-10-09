@@ -122,6 +122,7 @@ export interface ProductListProps {
 export interface SidebarFilterProps{
   maxPriceRange: number;
   minPriceRange: number;
+  filters: FilterCategory[];
 }
 
 export interface CartProps extends WithId<Document> {
