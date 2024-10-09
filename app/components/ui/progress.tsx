@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useState } from "react";
 import AnimatedCircularProgressBar from "@components/ui/animated-circular-progress-bar";
 
