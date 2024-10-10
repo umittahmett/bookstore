@@ -85,7 +85,9 @@ export interface TimelineProps {
 }
 
 export interface AddressProps {
-  name: string;
+  _id: ObjectId;
+  name: string; 
+  customerId:string
   firstName: string;
   lastName: string;
   address: string;
@@ -143,4 +145,12 @@ export interface CounterProps {
 export interface NavbarProps{
   user: any;
   productsInCart: number;
+}
+
+export interface GlobalAlertDialogProps {
+  title?: string;
+  message?: string;
+  open?: boolean;
+  onClose?: () => void;
+  onConfirm?: () => void;
 }
