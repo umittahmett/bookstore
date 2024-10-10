@@ -38,9 +38,9 @@ export default function Orders() {
         </TabsList>
         <TabsContent value="all">
           <div className="space-y-4">
-            {deliveredOrders.map((order, index) => (
+            {/* {deliveredOrders.map((order, index) => (
               <OrderCard key={index} {...order} />
-            ))}
+            ))} */}
           </div>
         </TabsContent>
       </Tabs>
