@@ -16,10 +16,11 @@ import { tokenCookie } from "@utils/cookie";
 import { verifyJWT } from "@utils/auth.server";
 import { useAtom, useAtomValue } from "jotai";
 import { isLoadingAtom } from "@utils/jotai";
-import { AnimatedCircularProgressBarDemo } from "./components/ui/progress";
+import { AnimatedCircularProgressBarDemo } from "@components/ui/progress";
 import { ObjectId } from "mongodb";
 import { JwtPayload } from "jsonwebtoken";
 import { db } from "@utils/db.server";
+import GlobalAlertDialog from "@components/popups/global-alert-dialog";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -75,6 +76,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <ScrollRestoration />
         <Scripts />
         <Toaster />
+        <GlobalAlertDialog />
         {isLoading && (
           <div className='fixed top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.5)] z-50 flex justify-center items-center'>
             <AnimatedCircularProgressBarDemo isLoading={isLoading} />
