@@ -1,6 +1,6 @@
-import { useFetcher } from '@remix-run/react';
-import { isLoadingAtom } from '@utils/jotai';
-import { useSetAtom } from 'jotai';
+import { useFetcher, useNavigate } from '@remix-run/react';
+import { alertDialogAtom, isLoadingAtom } from '@utils/jotai';
+import { useAtom, useSetAtom } from 'jotai';
 import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -15,12 +15,55 @@ export function useFetchAction() {
   const successCallback = useRef<(() => void) | null>(null);
   const errorCallback = useRef<(() => void) | null>(null);
   const setIsLoading = useSetAtom(isLoadingAtom);
+  const [redirectPath, setRedirectTo] = useState<string>('');
+  const navigate = useNavigate();
+  const [alertState, setAlertState] = useAtom(alertDialogAtom)
 
-  const sendAction = (formData: FormData, method: 'post' | 'get' | 'put' | 'delete' = 'post', action: string, successFunction?: () => void, errorFunction?: () => void,) => {
-    setIsLoading(true);
+  const sendAction = ({
+    formData,
+    method = 'post',
+    action,
+    successFunction,
+    errorFunction,
+    redirectTo,
+    showAlert,
+    alertTitle,
+    alertMessage,
+  }: {
+    formData: FormData;
+    method?: 'post' | 'get' | 'put' | 'delete';
+    action: string;
+    successFunction?: () => void;
+    errorFunction?: () => void;
+    redirectTo?: string;
+    showAlert?: boolean
+    alertTitle?: string
+    alertMessage?: string
+  }) => {
+    !showAlert && setIsLoading(true);
     successCallback.current = successFunction || null;
     errorCallback.current = errorFunction || null;
-    fetcher.submit(formData, { method, action });
+    setRedirectTo(redirectTo || '/');
+    if (showAlert) {
+      setAlertState({
+        open: true,
+        title: alertTitle || 'Are you absolutely sure?',
+        message: alertMessage || 'This action cannot be undone!',
+        onConfirm: () => {
+          setIsLoading(true);
+          fetcher.submit(formData, { method, action });
+          setAlertState({ open: false });
+        },
+        onClose: () => {
+          setIsLoading(true);
+          setAlertState({ open: false });
+          setIsLoading(false);
+        }
+      });
+    }
+    else {
+      fetcher.submit(formData, { method, action });
+    }
   };
 
   useEffect(() => {
@@ -38,6 +81,8 @@ export function useFetchAction() {
           onClick: () => console.log("Close"),
         },
       });
+
+      navigate(redirectPath);
     }
 
     if (fetcher.state === 'idle' && fetcher.data?.error) {
@@ -56,7 +101,6 @@ export function useFetchAction() {
       });
     }
   }, [fetcher.state, fetcher.data]);
-
 
   return { sendAction, fetcher };
 }
