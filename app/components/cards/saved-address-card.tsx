@@ -5,6 +5,7 @@ import { Button } from '../ui/button'
 import { Pencil } from 'lucide-react'
 
 const SavedAddressCard: React.FC<AddressProps> = ({
+  _id,
   name,
   firstName,
   lastName,
@@ -27,9 +28,9 @@ const SavedAddressCard: React.FC<AddressProps> = ({
         <div className='text-zinc-700 text-xs sticky mt-2'>{firstName} {lastName}</div>
       </CardContent>
 
-      <Button size="sm" variant="outline" className="absolute top-2.5 right-2.5">
+      <a href={`/profile/addresses/${_id}`}><Button size="sm" variant="outline" className="absolute top-2.5 right-2.5">
         <Pencil className="size-3" />Edit Address
-      </Button>
+      </Button></a>
     </Card>
   )
 }
