@@ -72,7 +72,6 @@ export function useFetchAction() {
         successCallback.current();
         successCallback.current = null;
       }
-      setIsLoading(false);
       toast.success(["Success"], {
         closeButton: false,
         description: fetcher.data.message || "Success.",
@@ -86,7 +85,6 @@ export function useFetchAction() {
     }
 
     if (fetcher.state === 'idle' && fetcher.data?.error) {
-      setIsLoading(false);
       if (errorCallback.current) {
         errorCallback.current();
         errorCallback.current = null;
@@ -100,6 +98,8 @@ export function useFetchAction() {
         },
       });
     }
+
+    setIsLoading(false)
   }, [fetcher.state, fetcher.data]);
 
   return { sendAction, fetcher };
