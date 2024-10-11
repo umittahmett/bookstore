@@ -9,7 +9,7 @@ import { useLoaderData, useParams } from "@remix-run/react"
 import { LoaderFunction, json } from "@remix-run/node"
 import { db } from "@utils/db.server"
 import { ObjectId } from "mongodb"
-import { addressFormSchema } from '~/schemas/address-form'
+import { addressFormSchema } from '~/lib/schemas'
 import { useFetchAction } from '@hooks/use-global-submit'
 
 export default function AddressForm() {

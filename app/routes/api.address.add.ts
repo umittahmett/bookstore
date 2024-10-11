@@ -3,7 +3,7 @@ import { verifyJWT } from "@utils/auth.server";
 import { tokenCookie } from "@utils/cookie";
 import { db } from "@utils/db.server";
 import { JwtPayload } from "jsonwebtoken";
-import { addressFormSchema } from "~/schemas/address-form";
+import { addressFormSchema } from "~/lib/schemas";
 
 export const action: ActionFunction = async ({ request }) => {
   // Check token
