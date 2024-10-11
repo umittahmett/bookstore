@@ -1,5 +1,4 @@
 import { ObjectId, WithId } from "mongodb";
-
 export interface NavigationLinkProps {
   title: string;
   href?: string;
@@ -20,9 +19,7 @@ export interface HeadingProps{
   title: string;
   description?: string; 
   type?: 'h1' | 'h2' | 'h3';
-}
-
-export interface BookProps {
+}export interface BookProps {
   _id: ObjectId;
   reviewCount?: number;
   seller: string;
@@ -40,14 +37,10 @@ export interface BookProps {
   stockQuantity: number;
   images: string[];
   description: string;
-}
-
-export interface CartProductProps extends BookProps {
+}export interface CartProductProps extends BookProps {
   quantity: number;
   selected: boolean;
-}
-
-export interface ProductSliderProps {
+}export interface ProductSliderProps {
   title: string;
   browseAllLink?: string;
   browseAllText?: string;
@@ -82,9 +75,7 @@ export interface TimelineProps {
   description: string;
   date: string;
   dateTime: string;
-}
-
-export interface AddressProps {
+}export interface AddressProps {
   _id: ObjectId;
   name: string; 
   customerId:string
@@ -101,12 +92,12 @@ export interface AddressProps {
   className?: string;
   onClick?: () => void;
 }
-
-export interface CustomerProps {
-  name: string;
+export interface UserProps extends WithId<Document> {
+  fullName: string;
   email: string;
   phone: string;
-  addresses: AddressProps[];
+  password:string
+  cartId:ObjectId
 }
 export interface OrderProps {
   seller: string;
@@ -119,15 +110,11 @@ export interface OrderProps {
 }
 export interface ProductListProps {
   products: JsonifyObject<BookProps[]>;
-}
-
-export interface SidebarFilterProps{
+}export interface SidebarFilterProps{
   maxPriceRange: number;
   minPriceRange: number;
   filters: FilterCategory[];
-}
-
-export interface CartProps extends WithId<Document> {
+}export interface CartProps extends WithId<Document> {
   productId: string;
   quantity: number;
   selected: boolean;
@@ -140,14 +127,10 @@ export interface CounterProps {
   reduce: () => void;
   increase: () => void;
   count?: number;
-}
-
-export interface NavbarProps{
+}export interface NavbarProps{
   user: any;
   productsInCart: number;
-}
-
-export interface GlobalAlertDialogProps {
+}export interface GlobalAlertDialogProps {
   title?: string;
   message?: string;
   open?: boolean;
