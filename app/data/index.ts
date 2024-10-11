@@ -246,3 +246,18 @@ export const profileNavigation: NavigationLinkProps[] = [
   { href: "/profile/user-info", title: "User Info",icon: User },
   { href: "/profile/repurchase", title: "Repurchase",icon: RotateCcw },
 ];
+
+export const months:string[] = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+]
