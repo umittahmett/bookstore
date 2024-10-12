@@ -3,12 +3,14 @@ import bcrypt from "bcryptjs";
 
 const usersCollection = mongodb.db("bookstore").collection("customers");
 
-export async function createUser({ email, password, fullName }: { email: string; password: string,fullName: string }) {
+export async function createUser({ email, password, fullName,phone, birthDate }: { email: string; password: string,fullName: string, phone: string, birthDate: any }) {
   const hashedPassword = await bcrypt.hash(password, 10);
   const result = await usersCollection.insertOne({
     fullName,
     email,
     password: hashedPassword,
+    phone,
+    birthDate,
   });
   return result.insertedId;
 }
