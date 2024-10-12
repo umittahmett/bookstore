@@ -93,6 +93,7 @@ export interface TimelineProps {
   onClick?: () => void;
 }
 export interface UserProps extends WithId<Document> {
+  birthDate: any;
   fullName: string;
   email: string;
   phone: string;
@@ -136,4 +137,8 @@ export interface CounterProps {
   open?: boolean;
   onClose?: () => void;
   onConfirm?: () => void;
+}
+export interface ResetPasswordFormProps{
+  className?: string;
+  title?: string;
 }
