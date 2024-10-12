@@ -1,13 +1,13 @@
 import { ActionFunction, json } from "@remix-run/node";
 import { db } from "@utils/db.server";
-import {  passwordSchema } from "@lib/schemas";
+import {  resetPasswordSchema } from "@lib/schemas";
 import bcrypt from "bcryptjs";
 
 
 export const action: ActionFunction = async ({ request }) => {
   try {
     const formPayload = Object.fromEntries(await request.formData())
-    const data = passwordSchema.parse(formPayload)
+    const data = resetPasswordSchema.parse(formPayload)
     
     // Get user by email
     const user = await db.collection('customers').findOne({email: data.email})
