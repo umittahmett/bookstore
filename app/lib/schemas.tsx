@@ -18,11 +18,10 @@ export const membershipSchema = z.object({
   fullName: z.string().min(2, "Fullname must be at least 2 characters"),
   email: z.string().email("Invalid email address"),
   phone: z.string().regex(/^\d{10}$/, "Phone number must be 10 digits"),
-  birthDay: z.string().min(1, "Please select a birthday"),
-  businessNotifications: z.boolean().optional(),
+  birthDate: z.any(),
 })
 
-export const passwordSchema = z.object({
+export const resetPasswordSchema = z.object({
   email: z.string().email("Invalid email address"),
   currentPassword: z.string().min(1, "Current password is required"),
   newPassword: z
@@ -33,4 +32,24 @@ export const passwordSchema = z.object({
 }).refine((data) => data.newPassword === data.confirmPassword, {
   message: "Passwords don't match",
   path: ["confirmPassword"],
+})
+
+export const registerSchema = z.object({
+  fullName: z.string().min(2, "Fullname must be at least 2 characters"),
+  email: z.string().email("Invalid email address"),
+  phone: z.string().regex(/^\d{10}$/, "Phone number must be 10 digits"),
+  birthDate: z.any(),
+  password: z
+    .string()
+    .min(10, "Password must be at least 10 characters long")
+    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/, "Password must contain at least one uppercase letter, one lowercase letter, and one number"),
+  confirmPassword: z.string().min(1, "Please confirm your new password"),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Passwords don't match",
+  path: ["confirmPassword"],
+})
+
+export const loginSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(10, "Password must be at least 10 characters long"),
 })
