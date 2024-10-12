@@ -43,7 +43,7 @@ export function useFetchAction() {
     !showAlert && setIsLoading(true);
     successCallback.current = successFunction || null;
     errorCallback.current = errorFunction || null;
-    setRedirectTo(redirectTo || '/');
+    redirectTo && setRedirectTo(redirectTo);
     if (showAlert) {
       setAlertState({
         open: true,
@@ -53,6 +53,7 @@ export function useFetchAction() {
           setIsLoading(true);
           fetcher.submit(formData, { method, action });
           setAlertState({ open: false });
+          setIsLoading(false);
         },
         onClose: () => {
           setIsLoading(true);
@@ -62,7 +63,7 @@ export function useFetchAction() {
       });
     }
     else {
-      fetcher.submit(formData, { method, action });
+      fetcher.submit(formData, { method, action })
     }
   };
 
@@ -72,6 +73,7 @@ export function useFetchAction() {
         successCallback.current();
         successCallback.current = null;
       }
+      setIsLoading(false)
       toast.success(["Success"], {
         closeButton: false,
         description: fetcher.data.message || "Success.",
@@ -81,7 +83,7 @@ export function useFetchAction() {
         },
       });
 
-      navigate(redirectPath);
+      redirectPath && navigate(redirectPath);
     }
 
     if (fetcher.state === 'idle' && fetcher.data?.error) {
@@ -89,6 +91,7 @@ export function useFetchAction() {
         errorCallback.current();
         errorCallback.current = null;
       }
+      setIsLoading(false)
       toast.error(["Error"], {
         closeButton: false,
         description: fetcher.data.error || "Error.",
@@ -98,8 +101,6 @@ export function useFetchAction() {
         },
       });
     }
-
-    setIsLoading(false)
   }, [fetcher.state, fetcher.data]);
 
   return { sendAction, fetcher };
