@@ -23,16 +23,22 @@ const Cart: React.FC = () => {
     const formData = new FormData();
     formData.append('productId', productId);
 
-    sendAction(formData, 'put', '/api/cart/toggle-select', () => {
-      const updatedItems = cartItems.map(item => {
-        if (item._id.toString() === productId) {
-          return { ...item, selected: !item.selected };
+    sendAction(
+      {
+        formData: formData,
+        method: 'put',
+        action: '/api/cart/toggle-select',
+        successFunction: () => {
+          const updatedItems = cartItems.map(item => {
+            if (item._id.toString() === productId) {
+              return { ...item, selected: !item.selected };
+            }
+            return item;
+          }
+          );
+          setCartItems(updatedItems);
         }
-        return item;
       }
-      );
-      setCartItems(updatedItems);
-    }
     );
   };
 
@@ -41,15 +47,20 @@ const Cart: React.FC = () => {
     const formData = new FormData();
     formData.append('productId', productId);
     formData.append('quantity', quantity.toString());
-    sendAction(formData, 'put', '/api/cart/update-quantity', () => {
-      const updatedItems = cartItems.map(item => {
-        if (item._id.toString() === productId) {
-          return { ...item, quantity };
-        }
-        console.log(item);
-        return item;
-      });
-      setCartItems(updatedItems);
+    sendAction({
+      formData: formData,
+      method: 'put',
+      action: '/api/cart/update-quantity',
+      successFunction: () => {
+        const updatedItems = cartItems.map(item => {
+          if (item._id.toString() === productId) {
+            return { ...item, quantity };
+          }
+          console.log(item);
+          return item;
+        });
+        setCartItems(updatedItems);
+      }
     });
   };
 
@@ -57,9 +68,14 @@ const Cart: React.FC = () => {
   const handleDeleteProduct = (productId: string) => {
     const formData = new FormData();
     formData.append('productId', productId);
-    sendAction(formData, 'delete', '/api/cart/delete-product', () => {
-      const updatedItems = cartItems.filter(item => item._id.toString() !== productId);
-      setCartItems(updatedItems);
+    sendAction({
+      formData: formData,
+      method: 'delete',
+      action: '/api/cart/delete-product',
+      successFunction: () => {
+        const updatedItems = cartItems.filter(item => item._id.toString() !== productId);
+        setCartItems(updatedItems);
+      }
     });
   }
 
