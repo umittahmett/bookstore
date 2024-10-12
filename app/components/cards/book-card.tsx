@@ -12,7 +12,11 @@ export const BookCard: React.FC<BookProps> = (book) => {
     const formData = new FormData();
     formData.append('productId', book._id.toString());
     formData.append('quantity', '1');
-    sendAction(formData, 'post', '/api/cart/add-product');
+    sendAction({
+      formData: formData,
+      method: 'post',
+      action: '/api/cart/add-product'
+    });
   };
 
   return (
