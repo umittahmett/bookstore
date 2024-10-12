@@ -1,109 +1,127 @@
 import { Button } from "@components/ui/button"
 import { Input } from "@components/ui/input"
-import { Label } from "@components/ui/label"
+import { zodResolver } from "@hookform/resolvers/zod"
 import { ActionFunction, json, redirect } from "@remix-run/node"
-import { Form, useActionData, useNavigation, useSubmit } from "@remix-run/react"
 import { createJWT } from "@utils/auth.server"
 import { tokenCookie } from "@utils/cookie"
 import { validatePassword } from "@utils/customer.server"
-import { useEffect } from "react"
-import { toast } from "sonner"
+import { InputProps } from "react-day-picker"
+import { useForm } from "react-hook-form"
 import { z } from "zod"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "~/components/ui/form"
+import { PasswordInput } from "~/components/ui/password-input"
+import { useFetchAction } from "~/hooks/use-global-submit"
+import { loginSchema } from "~/lib/schemas"
 
 // Server action
 export const action: ActionFunction = async ({ request }) => {
   const formPayload = Object.fromEntries(await request.formData())
-  const subscriberSchema = z.object({
-    email: z.string().email(),
-    password: z.string(),
-  })
 
   try {
-    const data = subscriberSchema.parse(formPayload)
+    const data = loginSchema.parse(formPayload)
     const user = await validatePassword(data.email, data.password);
     if (!user) {
       return json({ error: "Geçersiz kullanıcı adı veya şifre" }, { status: 401 });
     }
     const token = createJWT(user);
-    return redirect("/", {
-      headers: {
-        "Set-Cookie": await tokenCookie.serialize(token),
-      },
-    });
+    return json(
+      { success: true, message: "Başarıyla giriş yapıldı" },
+      {
+        status: 200,
+        headers: {
+          "Set-Cookie": await tokenCookie.serialize(token),
+        },
+      }
+    );
   } catch (error) {
     return json({ error: "Server Error", success: false }, { status: 500 })
   }
 }
 
-export default function LoginPage() {
-  const actionData = useActionData<typeof action>()
-  const navigation = useNavigation()
-  const submit = useSubmit()
+const LoginPage = () => {
+  const { sendAction } = useFetchAction()
+  const form = useForm<z.infer<typeof loginSchema>>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {}
+  })
 
-  // Show error toast
-  useEffect(() => {
-    if (actionData && !actionData.success) {
-      toast.error(actionData.error)
-    }
-  }, [actionData])
+  const onSubmit = () => {
+    const values = form.getValues();
+    const formData = new FormData();
+    Object.keys(values).forEach((key: string) => {
+      const value = values[key as keyof typeof values];
+      if (value !== undefined) {
+        formData.append(key, value as string);
+      }
+    });
 
-  // Show success toast on successful submission
-  useEffect(() => {
-    if (navigation.state === "loading" && navigation.formData) {
-      toast.success("Giriş başarılı")
-    }
-  }, [navigation.state, navigation.formData])
-
-  // Handle form submission
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    submit(event.currentTarget, { replace: true })
+    sendAction({
+      formData: formData,
+      method: 'post',
+      action: '/auth/login',
+      redirectTo: '/',
+    })
   }
-  // Disable the submit button if the form is submitting
-  const isSubmitting = navigation.state === "submitting"
+
   return (
-    <Form method="post" onSubmit={handleSubmit} className="mx-auto grid w-[350px] gap-6 text-zinc-900">
+    <div className="mx-auto grid w-[350px] gap-6 text-zinc-900">
       <div className="grid gap-2 text-start">
-        <h1 className="text-3xl font-bold">Login</h1>
-        <p className="text-zinc-500">
-          Enter your email below to login to your account
+        <h1 className="text-3xl font-bold">Sign In</h1>
+        <p className="text-balance text-zinc-500">
+          Enter your data below to sign in
         </p>
       </div>
 
-      <div className="grid gap-4">
-        <div className="grid gap-2">
-          <Label htmlFor="email">Email</Label>
-          <Input
-            id="email"
-            type="email"
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          {/* Email*/}
+          <FormField
+            control={form.control}
             name="email"
-            placeholder="m@example.com"
-            required
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input placeholder="Email"
+                    type="email"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
-        <div className="grid gap-2">
-          <div className="flex items-center">
-            <Label htmlFor="password">Password</Label>
-            <a
-              href="/forgot-password"
-              className="ml-auto inline-block text-zinc-900 text-sm underline"
-            >
-              Forgot your password?
-            </a>
-          </div>
-          <Input id="password" type="password" name="password" placeholder="Password" required />
-        </div>
-        <Button type="submit" disabled={isSubmitting} className="w-full">
-          {isSubmitting ? "Logging in..." : "Login"}
-        </Button>
-      </div>
 
-      <div className="mt-4 text-start text-zinc-500 text-sm">
-        Don&apos;t have an account?{" "}
-        <a href="/auth/register" className="underline text-zinc-900">
-          Sign up
-        </a>
-      </div>
-    </Form>
-  )
-}
+          {/* Current Password */}
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <div className="flex items-center justify-between">
+                  <FormLabel>Password</FormLabel>
+                  <a
+                    href="/forgot-password"
+                    className="ml-auto inline-block text-zinc-900 text-xs underline"
+                  >
+                    Forgot your password?
+                  </a>
+                </div>
+                <FormControl>
+                  <PasswordInput placeholder="Password"
+                    {...field as InputProps}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <Button className="w-full">Sign in</Button>
+        </form>
+      </Form>
+    </div>
+  );
+};
+
+export default LoginPage;
