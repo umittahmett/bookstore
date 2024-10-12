@@ -7,6 +7,7 @@ import { JwtPayload } from "jsonwebtoken";
 import { ObjectId } from "mongodb"
 import MembershipForm from "@components/forms/membership-form";
 import ResetPasswordForm from "@components/forms/reset-pasword-form";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 
 export default function UserInformation() {
   const loaderData = useLoaderData<typeof loader>()
@@ -14,7 +15,14 @@ export default function UserInformation() {
   return (
     <div className="grid gap-6 md:grid-cols-2">
       <MembershipForm {...user} />
-      <ResetPasswordForm {...user} />
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-2xl font-bold text-amber-500">Password Update</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ResetPasswordForm {...user} />
+        </CardContent>
+      </Card>
     </div>
   )
 }
