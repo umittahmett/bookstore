@@ -32,24 +32,24 @@ const MembershipForm: React.FC<UserProps> = (user) => {
     Object.keys(values).forEach((key: string) => {
       const value = values[key as keyof typeof values];
       if (value !== undefined) {
-        formData.append(key, value as string);
+        formData.append(key, value.toString());
       }
     });
 
     sendAction({
       formData: formData,
       method: 'put',
-      action: '/api/address/update',
+      action: '/api/user-information/update',
       showAlert: true,
       alertTitle: "Are you sure?",
-      alertMessage: "Do you want to update this data?"
+      alertMessage: "Do you want to update your data?"
     })
   }
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-2xl font-bold text-amber-500">Üyelik Bilgilerim</CardTitle>
+        <CardTitle className="text-2xl font-bold text-amber-500">Membership Information</CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -99,17 +99,17 @@ const MembershipForm: React.FC<UserProps> = (user) => {
               )}
             />
 
-            {/* Birthday */}
+            {/* Date of birth */}
             <FormField
               control={form.control}
-              name="birthDay"
+              name="birthDate"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Birt Day</FormLabel>
+                <FormItem className="flex flex-col">
+                  <FormLabel>Date of birth</FormLabel>
                   <FormControl>
                     <DatePicker
-                    // date={field.value}
-                    // onDateChange={field.onChange}
+                      value={field.value}
+                      onChange={(date: Date | undefined) => field.onChange(date)}
                     />
                   </FormControl>
                   <FormMessage />
@@ -117,7 +117,7 @@ const MembershipForm: React.FC<UserProps> = (user) => {
               )}
             />
 
-            <Button className="w-full">Güncelle</Button>
+            <Button disabled={!form.formState.isDirty} className="w-full">Update</Button>
           </form>
         </Form>
       </CardContent>
