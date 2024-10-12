@@ -16,9 +16,14 @@ export default function Addresses() {
     <div>
       <h1 className="text-2xl font-bold mb-4">Adres Bilgilerim</h1>
       <div className="grid gap-2.5">
-        {addresses.map((item: AddressProps, index: number) => (
-          <SavedAddressCard moreDetailed key={index} {...item} />
-        ))}
+        {
+          addresses.length > 0 ?
+            addresses.map((item: AddressProps, index: number) => (
+              <SavedAddressCard moreDetailed key={index} {...item} />
+            ))
+            :
+            <p className="text-zinc-500 text-center py-10">No addresses found</p>
+        }
         <a className="mt-4 w-fit ml-auto" href="/profile/addresses/new">
           <Button className="pl-4">
             <Plus className="h-4 w-4" />
