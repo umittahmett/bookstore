@@ -17,6 +17,7 @@ import { JwtPayload } from 'jsonwebtoken'
 import { db } from '@utils/db.server'
 import { ObjectId } from 'mongodb'
 import { useLoaderData } from '@remix-run/react'
+import { Checkbox } from '~/components/ui/checkbox'
 
 export default function CheckoutPage() {
   const loaderData = useLoaderData<typeof loader>();
@@ -102,6 +103,15 @@ export default function CheckoutPage() {
             <div>
               <Label htmlFor="additionalInfo" className="text-sm text-zinc-600">Additional information</Label>
               <Textarea id="additionalInfo" className="mt-1" rows={4} />
+            </div>
+
+            <div className='flex items-center w-full'>
+              <Checkbox
+                className="max-lg:size-6 mr-2"
+                id={`cashOnDelivery`}
+                defaultChecked
+              />
+              <Label htmlFor="additionalInfo" className="text-sm text-zinc-600">Cash on delivery</Label>
             </div>
           </form>
 
