@@ -23,7 +23,11 @@ export default function BookDetailPage() {
     const formData = new FormData();
     formData.append('productId', product._id.toString());
     formData.append('quantity', '1');
-    sendAction(formData, 'post', '/api/cart/add-product');
+    sendAction({
+      formData: formData,
+      method: 'post',
+      action: '/api/cart/add-product'
+    });
   };
 
   return (
