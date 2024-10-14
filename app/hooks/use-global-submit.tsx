@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
 type ResponseData = {
+  status?: number;
   success?: boolean;
   message?: string;
   error?: string;
@@ -14,7 +15,7 @@ export function useFetchAction() {
   const fetcher = useFetcher<ResponseData>();
   const successCallback = useRef<(() => void) | null>(null);
   const errorCallback = useRef<(() => void) | null>(null);
-  const setIsLoading = useSetAtom(isLoadingAtom);
+  const [isLoading, setIsLoading] = useAtom(isLoadingAtom);
   const [redirectPath, setRedirectTo] = useState<string>('');
   const navigate = useNavigate();
   const [alertState, setAlertState] = useAtom(alertDialogAtom)
@@ -68,7 +69,7 @@ export function useFetchAction() {
   };
 
   useEffect(() => {
-    if (fetcher.state === 'idle' && fetcher.data?.success) {
+    if (fetcher.state === 'idle' && (fetcher.data?.success || fetcher.data?.status === 200)) {
       if (successCallback.current) {
         successCallback.current();
         successCallback.current = null;
@@ -100,6 +101,10 @@ export function useFetchAction() {
           onClick: () => console.log("Close"),
         },
       });
+    }
+
+    if (isLoading) {
+      setIsLoading(false);
     }
   }, [fetcher.state, fetcher.data]);
 
