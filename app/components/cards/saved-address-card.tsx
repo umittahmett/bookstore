@@ -1,10 +1,10 @@
 import { Card, CardContent } from '@components/ui/card'
-import { AddressProps } from '~/types'
+import { AddressCardProps } from '~/types'
 import clsx from 'clsx'
 import { Button } from '../ui/button'
 import { Pencil } from 'lucide-react'
 
-const SavedAddressCard: React.FC<AddressProps> = ({
+const SavedAddressCard: React.FC<AddressCardProps> = ({
   _id,
   name,
   firstName,
@@ -28,9 +28,10 @@ const SavedAddressCard: React.FC<AddressProps> = ({
         <div className='text-zinc-700 text-xs sticky mt-2'>{firstName} {lastName}</div>
       </CardContent>
 
-      <a href={`/profile/addresses/${_id}`}><Button size="sm" variant="outline" className="absolute top-2.5 right-2.5">
-        <Pencil className="size-3" />Edit Address
-      </Button></a>
+      <a href={`/profile/addresses/${_id}`}>
+        <Button size="closeIcon" variant="outline" className="absolute top-2.5 right-2.5">
+          <Pencil className="size-3 !text-zinc-900" />
+        </Button></a>
     </Card>
   )
 }
