@@ -75,6 +75,8 @@ export interface TimelineProps {
   description: string;
   date: string;
   dateTime: string;
+
+
 }export interface AddressProps {
   _id: ObjectId;
   name: string; 
@@ -88,6 +90,9 @@ export interface TimelineProps {
   zip: string;
   phone: string;
   additionalInfo?: string;
+}
+
+export interface AddressCardProps extends AddressProps {
   moreDetailed?: boolean;
   className?: string;
   onClick?: () => void;
@@ -141,4 +146,8 @@ export interface CounterProps {
 export interface ResetPasswordFormProps{
   className?: string;
   title?: string;
+}
+export interface AddressesPopupProps {
+  addresses: AddressProps[];
+  setSelectedAddress: (address: AddressProps) => void;
 }
