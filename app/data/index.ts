@@ -7,27 +7,29 @@ export const footerNavigation: NavigationLinkProps[] = [
   {
     title: "Shop",
     links: [
-      { href: "/", title: "New Releases" },
-      { href: "/", title: "Best Sellers" },
-      { href: "/", title: "Genres" },
-      { href: "/", title: "Gift Cards" },
-      { href: "/", title: "Special Offers" },
+      { href: "/search?Genre=fantasy", title: "Fantasy" },
+      { href: "/search?Genre=mystery", title: "Mystery" },
+      { href: "/search?Genre=thriller", title: "Thriller" },
+      { href: "/search?Genre=romance", title: "Romance" },
+      { href: "/search?Genre=historical-fiction", title: "Historical Fiction" },
+      { href: "/search?Genre=science-fiction", title: "Science Fiction" },
+      { href: "/search?Genre=literary-fiction", title: "Literary Fiction" },
     ],
   },
   {
     title: "About Us",
     links: [
-      { href: "/", title: "Our Story" },
-      { href: "/", title: "Meet the Team" },
-      { href: "/", title: "Careers" },
+      { href: "/about", title: "Our Story" },
+      { href: "/about", title: "Meet the Team" },
+      { href: "/about", title: "Careers" },
     ],
   },
   {
     title: "Customer Service",
     links: [
-      { href: "/", title: "Contact" },
-      { href: "/", title: "FAQs" },
-      { href: "/", title: "Shipping Information" },
+      { href: "/contact", title: "Contact" },
+      { href: "/contact", title: "FAQs" },
+      { href: "/contact", title: "Shipping Information" },
     ],
   },
   {
