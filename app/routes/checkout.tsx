@@ -30,6 +30,7 @@ export default function CheckoutPage() {
     return products.reduce((total: number, book: CartProductProps) => total + book.price * book.quantity, 0).toFixed(2)
   }
   const [selectedAddress, setSelectedAddress] = useState<AddressProps>(addresses[0])
+  const [cashOnDelivery, setCashOnDelivery] = useState(true)
 
   return (
     <div className="default-container py-10">
@@ -39,18 +40,18 @@ export default function CheckoutPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full">
         <div>
           {/* Saved Address Selection */}
-          <h2 className="text-xl font-semibold">Saved Addresses</h2>
+          <h2 className="text-xl font-semibold mb-2">Saved Addresses</h2>
           <div className='w-full'>
             <SavedAddressCard moreDetailed {...addresses[0]} />
             {/* All Addresses Popup */}
             <AddressesPopup setSelectedAddress={setSelectedAddress} addresses={addresses} />
 
-
-            <div className='flex items-center w-full my-4'>
+            <div className='flex items-center w-full mb-4 mt-10'>
               <Checkbox
                 className="max-lg:size-6 mr-2"
                 id={`cashOnDelivery`}
-                defaultChecked
+                defaultChecked={cashOnDelivery}
+                onChange={() => setCashOnDelivery(!cashOnDelivery)}
               />
               <Label htmlFor="additionalInfo" className="text-sm text-zinc-600">Cash on delivery</Label>
             </div>
@@ -183,7 +184,9 @@ export default function CheckoutPage() {
               </div>
             </div>
 
-            <Button className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white">Go to payment</Button>
+            <Button className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white">
+              {cashOnDelivery ? 'Place Order' : 'Pay Now'}
+            </Button>
           </CardContent>
         </Card>
       </div>
