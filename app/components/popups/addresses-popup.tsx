@@ -2,8 +2,15 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import SavedAddressCard from '@components/cards/saved-address-card'
 import { AddressesPopupProps } from '~/types'
 import { Button } from '../ui/button'
+import { useState } from 'react'
+import AddressDetailForm from '../forms/address-detail-form'
+import { Plus } from 'lucide-react'
 
 const AddressesPopup: React.FC<AddressesPopupProps> = ({ addresses, setSelectedAddress }) => {
+  const [showAddressForm, setShowAddressForm] = useState<boolean>(false)
+  const title = showAddressForm ? 'Add new address' : 'Saved Addresses'
+  const desctiption = showAddressForm ? 'Fill the form below to add a new address' : 'Select an address'
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -11,21 +18,23 @@ const AddressesPopup: React.FC<AddressesPopupProps> = ({ addresses, setSelectedA
       </DialogTrigger>
       <DialogContent className="sm:max-w-3xl">
         <DialogHeader>
-          <DialogTitle>Saved Addresses</DialogTitle>
-          <DialogDescription>Select an address</DialogDescription>
+          <DialogTitle>{title}</DialogTitle>
+          <DialogDescription>{desctiption}</DialogDescription>
         </DialogHeader>
-        <div className='space-y-2.5 flex max-h-[75vh] flex-col justify-start overflow-y-auto pr-2.5'>
-          {addresses.length > 0 ?
-            addresses?.map((item, index) => (
-              <SavedAddressCard onClick={() => setSelectedAddress(item)} moreDetailed {...item} key={index} />
-            ))
-            :
-            <p className='text-zinc-500 py-10 text-sm text-center'>No addresses found</p>
-          }
-          <a href="/profile/addresses/new" className='ml-auto'>
-            <Button size='sm'>Add new</Button>
-          </a>
-        </div>
+        {!showAddressForm ?
+          <div className='space-y-2.5 flex max-h-[75vh] flex-col justify-start overflow-y-auto pr-2.5'>
+            {addresses.length > 0 ?
+              addresses?.map((item, index) => (
+                <SavedAddressCard onClick={() => setSelectedAddress(item)} moreDetailed {...item} key={index} />
+              ))
+              :
+              <p className='text-zinc-500 py-10 text-sm text-center'>No addresses found</p>
+            }
+            <Button className='absolute bottom-5 right-5 pl-3.5' onClick={() => setShowAddressForm(!showAddressForm)} ><Plus className='size-5' />Add new</Button>
+          </div>
+          :
+          <AddressDetailForm successFunction={() => window.location.reload()} redirectTo='/checkout' action='add' />
+        }
       </DialogContent>
     </Dialog>
   )
