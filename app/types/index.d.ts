@@ -120,7 +120,7 @@ export interface ProductListProps {
   maxPriceRange: number;
   minPriceRange: number;
   filters: FilterCategory[];
-}export interface CartProps extends WithId<Document> {
+}export interface CartProps extends WithId<Document> extends WithId<Document> {
   productId: string;
   quantity: number;
   selected: boolean;
@@ -150,4 +150,11 @@ export interface ResetPasswordFormProps{
 export interface AddressesPopupProps {
   addresses: AddressProps[];
   setSelectedAddress: (address: AddressProps) => void;
+}
+
+export interface AddressDetailFormProps {
+  address?: AddressProps;
+  action?: 'add' | 'update';
+  redirectTo?: string;
+  successFunction?: () => void;
 }
