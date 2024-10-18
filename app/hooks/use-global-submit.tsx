@@ -54,12 +54,9 @@ export function useFetchAction() {
           setIsLoading(true);
           fetcher.submit(formData, { method, action });
           setAlertState({ open: false });
-          setIsLoading(false);
         },
         onClose: () => {
-          setIsLoading(true);
           setAlertState({ open: false });
-          setIsLoading(false);
         }
       });
     }
@@ -69,41 +66,40 @@ export function useFetchAction() {
   };
 
   useEffect(() => {
-    if (fetcher.state === 'idle' && (fetcher.data?.success || fetcher.data?.status === 200)) {
-      if (successCallback.current) {
-        successCallback.current();
-        successCallback.current = null;
+    if (fetcher.state === "idle") {
+      console.log(fetcher.state, fetcher.data);
+      if (fetcher.data && fetcher.data.success) {
+        if (successCallback.current) {
+          successCallback.current();
+          successCallback.current = null;
+        }
+        setIsLoading(false)
+        toast.success(["Success"], {
+          closeButton: false,
+          description: fetcher.data.message || "Success.",
+          action: {
+            label: "Close",
+            onClick: () => console.log("Close"),
+          },
+        });
+
+        redirectPath && navigate(redirectPath);
       }
-      setIsLoading(false)
-      toast.success(["Success"], {
-        closeButton: false,
-        description: fetcher.data.message || "Success.",
-        action: {
-          label: "Close",
-          onClick: () => console.log("Close"),
-        },
-      });
-
-      redirectPath && navigate(redirectPath);
-    }
-
-    if (fetcher.state === 'idle' && fetcher.data?.error) {
-      if (errorCallback.current) {
-        errorCallback.current();
-        errorCallback.current = null;
+      if (fetcher.data && fetcher.data.error) {
+        if (errorCallback.current) {
+          errorCallback.current();
+          errorCallback.current = null;
+        }
+        setIsLoading(false)
+        toast.error(["Error"], {
+          closeButton: false,
+          description: fetcher.data.error || "Error.",
+          action: {
+            label: "Close",
+            onClick: () => console.log("Close"),
+          },
+        });
       }
-      setIsLoading(false)
-      toast.error(["Error"], {
-        closeButton: false,
-        description: fetcher.data.error || "Error.",
-        action: {
-          label: "Close",
-          onClick: () => console.log("Close"),
-        },
-      });
-    }
-
-    if (isLoading) {
       setIsLoading(false);
     }
   }, [fetcher.state, fetcher.data]);
