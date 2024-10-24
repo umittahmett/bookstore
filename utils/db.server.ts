@@ -25,30 +25,48 @@ declare global {
   var __db: MongoClient | undefined;
 }
 
-if (process.env.NODE_ENV === "production") {
-  mongodb = new MongoClient(connectionString, {
-    connectTimeoutMS: 30000,
-    socketTimeoutMS: 45000,
-  });
-} else {
-  if (!global.__db) {
-    global.__db = new MongoClient(connectionString);
+async function connectToDatabase(): Promise<{ db: Db; gfsBucket: GridFSBucket }> {
+  if (!mongodb) {
+    mongodb = process.env.NODE_ENV === "production"
+      ? new MongoClient(connectionString, {
+          connectTimeoutMS: 30000,
+          socketTimeoutMS: 45000,
+        })
+      : global.__db || new MongoClient(connectionString);
+
+    if (process.env.NODE_ENV !== "production") {
+      global.__db = mongodb;
+    }
   }
-  mongodb = global.__db;
+
+  try {
+    await mongodb.connect();
+    console.log("Connected to MongoDB");
+    db = mongodb.db("bookstore");
+    gfsBucket = new GridFSBucket(db, {
+      bucketName: 'uploads',
+    });
+    return { db, gfsBucket };
+  } catch (error) {
+    console.error("Failed to connect to MongoDB:", error);
+    throw error;
+  }
 }
 
-mongodb.connect().then(() => {
-  db = mongodb.db("bookstore");  
-  gfsBucket = new GridFSBucket(db, {
-    bucketName: 'uploads',
-  });
+process.on('SIGINT', async () => {
+  try {
+    await mongodb.close();
+    console.log('MongoDB connection closed');
+    process.exit(0);
+  } catch (err) {
+    console.error('Error closing MongoDB connection:', err);
+    process.exit(1);
+  }
 });
 
 let ObjectId = BSON.ObjectId;
 
 export {
-  mongodb,
-  db,       
+  connectToDatabase,
   ObjectId,
-  gfsBucket,
 };

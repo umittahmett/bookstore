@@ -19,8 +19,8 @@ export interface HeadingProps{
   title: string;
   description?: string; 
   type?: 'h1' | 'h2' | 'h3';
-}export interface BookProps {
-  _id: ObjectId;
+}
+export interface BookProps extends WithId<Document> {
   reviewCount?: number;
   seller: string;
   publisher: string;
@@ -134,8 +134,8 @@ export interface CounterProps {
   increase: () => void;
   count?: number;
 }export interface NavbarProps{
-  user: any;
-  productsInCart: number;
+  user?: any;
+  productsInCart?: number;
 }export interface GlobalAlertDialogProps {
   title?: string;
   message?: string;

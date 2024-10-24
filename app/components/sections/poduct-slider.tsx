@@ -1,6 +1,6 @@
 import { BookCard } from '@components/cards/book-card'
 import { ProductSliderProps } from '~/types'
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { Button } from '@components/ui/button'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import clsx from 'clsx'
@@ -29,6 +29,10 @@ const ProductSlider: React.FC<ProductSliderProps> = ({ title, browseAllText, bro
       })
     }
   }
+
+  useEffect(() => {
+    console.log(books);
+  }, [books])
 
   return (
     <section aria-labelledby="category-heading" className={clsx("flex items-center justify-center py-36", className)}>

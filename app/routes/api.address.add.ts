@@ -1,7 +1,7 @@
 import { ActionFunction, json } from "@remix-run/node";
 import { verifyJWT } from "@utils/auth.server";
 import { tokenCookie } from "@utils/cookie";
-import { db } from "@utils/db.server";
+import { connectToDatabase } from "@utils/db.server";
 import { JwtPayload } from "jsonwebtoken";
 import { addressFormSchema } from "~/lib/schemas";
 
@@ -14,6 +14,7 @@ export const action: ActionFunction = async ({ request }) => {
 
   const formPayload = Object.fromEntries(await request.formData())
   try {
+    const { db } = await connectToDatabase()
     const data = addressFormSchema.parse(formPayload)
     await db.collection('addresses').insertOne(data)
     return json({ success: true, message: 'Address added' })

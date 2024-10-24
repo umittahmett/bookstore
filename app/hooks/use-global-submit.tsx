@@ -1,6 +1,6 @@
 import { useFetcher, useNavigate } from '@remix-run/react';
 import { alertDialogAtom, isLoadingAtom } from '@utils/jotai';
-import { useAtom, useSetAtom } from 'jotai';
+import { useAtom } from 'jotai';
 import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 

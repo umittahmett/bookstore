@@ -13,7 +13,7 @@ import { json, LoaderFunction, redirect } from '@remix-run/node'
 import { tokenCookie } from '@utils/cookie'
 import { verifyJWT } from '@utils/auth.server'
 import { JwtPayload } from 'jsonwebtoken'
-import { db } from '@utils/db.server'
+import { connectToDatabase } from '@utils/db.server'
 import { ObjectId } from 'mongodb'
 import { useLoaderData } from '@remix-run/react'
 import { Checkbox } from '~/components/ui/checkbox'
@@ -202,6 +202,8 @@ export const loader: LoaderFunction = async ({ request }) => {
     if (!token) { return redirect("/auth/login") }
     const user = verifyJWT(token) as JwtPayload;
     if (!user) { return redirect("/auth/login") }
+
+    const { db } = await connectToDatabase()
 
     // Get user addresses
     const addresses = await db.collection('addresses').find({ userId: user._id }).toArray()

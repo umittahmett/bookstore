@@ -2,7 +2,7 @@ import { json, LoaderFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { verifyJWT } from "@utils/auth.server";
 import { tokenCookie } from "@utils/cookie";
-import { db } from "@utils/db.server";
+import { connectToDatabase } from "@utils/db.server";
 import { JwtPayload } from "jsonwebtoken";
 import { ObjectId } from "mongodb"
 import MembershipForm from "@components/forms/membership-form";
@@ -36,6 +36,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     if (!userToken) { return json({ userToken: null }) }
 
     // get user cart products length
+    const { db } = await connectToDatabase()
     const user = await db.collection('customers').findOne({ _id: new ObjectId(userToken.id as string) })
 
     // check user

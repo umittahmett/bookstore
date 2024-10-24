@@ -5,7 +5,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@c
 import ProductSlider from '@components/sections/poduct-slider';
 import { Card, CardContent } from '@components/ui/card';
 import { Separator } from '@radix-ui/react-select';
-import { db } from '@utils/db.server';
+import { connectToDatabase } from '@utils/db.server';
 import { ObjectId } from 'mongodb';
 import { json, LoaderFunction } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
@@ -135,6 +135,8 @@ export const loader: LoaderFunction = async ({ params }) => {
     // Get product id
     const productId = params.product
     console.log('product id', productId);
+
+    const { db } = await connectToDatabase()
 
     // get product
     const product = await db.collection('products').findOne({ _id: new ObjectId(productId as string) })

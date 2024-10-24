@@ -7,7 +7,7 @@ import { ObjectId } from 'mongodb'
 import { json, LoaderFunction, redirect } from '@remix-run/node'
 import { tokenCookie } from '@utils/cookie'
 import { verifyJWT } from '@utils/auth.server'
-import { db } from '@utils/db.server'
+import { connectToDatabase } from '@utils/db.server'
 import { JwtPayload } from 'jsonwebtoken'
 import { useLoaderData } from '@remix-run/react'
 import Counter from '@components/ui/counter'
@@ -193,6 +193,8 @@ export const loader: LoaderFunction = async ({ request }) => {
     const user = verifyJWT(token) as JwtPayload;
     if (!user) { return redirect("/auth/login") }
 
+    const { db } = await connectToDatabase()
+
     // Get user cart
     const userCart = await db.collection('carts').findOne({ _id: new ObjectId(user.cartId as string) });
 
@@ -219,6 +221,6 @@ export const loader: LoaderFunction = async ({ request }) => {
     return json({ cart: userCart, products: enrichedProducts });
   } catch (error) {
     console.error("Loader sırasında bir hata oluştu:", error);
-    throw new Error("Sunucu hatası: Kullanıcı doğrulama işlemi başarısız.");
+    throw new Error("Sunucu hatası. Sepet yüklenirken bir hata oluştu.");
   }
 };

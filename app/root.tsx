@@ -19,7 +19,7 @@ import { isLoadingAtom } from "@utils/jotai";
 import { AnimatedCircularProgressBarDemo } from "@components/ui/progress";
 import { ObjectId } from "mongodb";
 import { JwtPayload } from "jsonwebtoken";
-import { db } from "@utils/db.server";
+import { connectToDatabase } from "@utils/db.server";
 import GlobalAlertDialog from "@components/popups/global-alert-dialog";
 
 export const links: LinksFunction = () => [
@@ -41,9 +41,10 @@ export const loader: LoaderFunction = async ({ request }) => {
     const token = await tokenCookie.parse(request.headers.get("Cookie"));
     if (!token) { return json({ user: null }) }
     const user = verifyJWT(token) as JwtPayload
-    if (!user) { return json({ user: null }) }
+    if (!user) { return null }
 
     // get user cart products length
+    const { db } = await connectToDatabase()
     const userCart = await db.collection('carts').findOne({ _id: new ObjectId(user.cartId as string) })
     let productsInCart: number = 0
     if (userCart) {
@@ -70,7 +71,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        <Navbar productsInCart={loaderData.productsInCart} user={loaderData.user} />
+        <Navbar productsInCart={loaderData && loaderData.productsInCart} user={loaderData && loaderData.user} />
         {children}
         <Footer />
         <ScrollRestoration />

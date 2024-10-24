@@ -5,7 +5,7 @@ import { json, LoaderFunction, redirect } from "@remix-run/node"
 import { tokenCookie } from "@utils/cookie"
 import { verifyJWT } from "@utils/auth.server"
 import { JwtPayload } from "jsonwebtoken"
-import { db } from "@utils/db.server"
+import { connectToDatabase } from "@utils/db.server"
 import { useLoaderData } from "@remix-run/react"
 import { AddressProps } from "~/types"
 
@@ -45,6 +45,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     if (!user) { return redirect("/auth/login") }
 
     // Get user addresses
+    const { db } = await connectToDatabase()
     const addresses = await db.collection('addresses').find({ userId: user._id }).toArray()
 
     return json({ addresses });

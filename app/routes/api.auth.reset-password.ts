@@ -1,11 +1,12 @@
 import { ActionFunction, json } from "@remix-run/node";
-import { db } from "@utils/db.server";
+import { connectToDatabase } from "@utils/db.server";
 import {  resetPasswordSchema } from "@lib/schemas";
 import bcrypt from "bcryptjs";
 
 
 export const action: ActionFunction = async ({ request }) => {
   try {
+    const { db } = await connectToDatabase()
     const formPayload = Object.fromEntries(await request.formData())
     const data = resetPasswordSchema.parse(formPayload)
     

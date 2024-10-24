@@ -1,7 +1,8 @@
-import { mongodb, ObjectId } from "./db.server";
+import { connectToDatabase } from "./db.server";
 import bcrypt from "bcryptjs";
 
-const usersCollection = mongodb.db("bookstore").collection("customers");
+const client =  await connectToDatabase()
+const usersCollection = client.db.collection("customers");
 
 export async function createUser({ email, password, fullName,phone, birthDate }: { email: string; password: string,fullName: string, phone: string, birthDate: any }) {
   const hashedPassword = await bcrypt.hash(password, 10);

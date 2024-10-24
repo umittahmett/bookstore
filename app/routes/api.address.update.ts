@@ -1,7 +1,7 @@
 import { ActionFunction, json } from "@remix-run/node";
 import { verifyJWT } from "@utils/auth.server";
 import { tokenCookie } from "@utils/cookie";
-import { db } from "@utils/db.server";
+import { connectToDatabase } from "@utils/db.server";
 import { JwtPayload } from "jsonwebtoken";
 import { ObjectId } from "mongodb";
 import { addressFormSchema } from "~/lib/schemas";
@@ -16,6 +16,7 @@ export const action: ActionFunction = async ({ request }) => {
   const formPayload = Object.fromEntries(await request.formData())
   const addressId = formPayload.addressId as string
   try {
+    const { db } = await connectToDatabase()
     const data = addressFormSchema.parse(formPayload)
     // Check if address exists
     const address = await db.collection('addresses').findOne({ _id: new ObjectId(addressId as string) })

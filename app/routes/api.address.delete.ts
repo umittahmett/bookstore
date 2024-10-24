@@ -1,7 +1,7 @@
 import { ActionFunction, json } from "@remix-run/node";
 import { verifyJWT } from "@utils/auth.server";
 import { tokenCookie } from "@utils/cookie";
-import { db } from "@utils/db.server";
+import { connectToDatabase } from "@utils/db.server";
 import { JwtPayload } from "jsonwebtoken";
 import { ObjectId } from "mongodb";
 
@@ -17,6 +17,7 @@ export const action: ActionFunction = async ({request }) => {
   const addressId = formPayload.addressId as string
   
   try {
+    const { db } = await connectToDatabase()
     await db.collection('addresses').deleteOne({ _id: new ObjectId(addressId) })
     return json({ success: true, message: 'Address deleted'})
   } catch (error) {

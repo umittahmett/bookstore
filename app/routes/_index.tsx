@@ -1,10 +1,9 @@
 import { json, LoaderFunction, type MetaFunction } from "@remix-run/node";
 import Hero from "@components/hero";
 import Cta from "@components/sections/cta";
-import { books } from "@data/dummy";
 import Discover from "@components/sections/discover";
 import ProductSlider from "@components/sections/poduct-slider";
-import { db } from "@utils/db.server";
+import { connectToDatabase } from "@utils/db.server";
 import { useLoaderData } from "@remix-run/react";
 
 export const meta: MetaFunction = () => {
@@ -40,6 +39,7 @@ export default function Index() {
 // Loader Function
 export const loader: LoaderFunction = async ({ request }) => {
   try {
+    const { db } = await connectToDatabase()
     // Get popular products from database by viewCount
     const popularProducts = await db.collection("products").find().sort({ reviewCount: -1 }).limit(10).toArray()
     return json({ popularProducts });

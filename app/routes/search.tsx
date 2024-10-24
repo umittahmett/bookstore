@@ -2,13 +2,13 @@ import MobileFilter from "@components/sections/mobile-filter";
 import SidebarFilter from "@components/sections/sidebar-filter";
 import BookSearch from "@components/sections/book-search";
 import { Suspense, useEffect, useState } from "react";
-import { mongodb } from "@utils/db.server";
 import { useLoaderData } from "@remix-run/react";
 import { BookProps, FilterCategory } from "~/types";
 import ProductList from "@components/sections/product-list";
 import BookCardSkeleton from "@components/skeletons/book-card-skeleton";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@components/ui/pagination";
 import { LoaderFunction, json } from "@remix-run/node";
+import { connectToDatabase } from "@utils/db.server";
 
 const ProjectList = () => {
   const loaderData = useLoaderData<typeof loader>();
@@ -97,7 +97,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   const language = url.searchParams.get("language")?.split(',');
   const minPrice = url.searchParams.get("minPrice");
   const maxPrice = url.searchParams.get("maxPrice");
-  const db = mongodb.db('bookstore');
+  const { db } = await connectToDatabase();
   const collection = db.collection('products');
   const query: any = {};
 

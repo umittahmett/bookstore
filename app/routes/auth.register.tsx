@@ -3,7 +3,7 @@ import { Input } from "@components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ActionFunction, json } from "@remix-run/node";
 import { createUser } from "@utils/customer.server";
-import { db } from "@utils/db.server";
+import { connectToDatabase } from "@utils/db.server";
 import { InputProps } from "react-day-picker";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -178,6 +178,7 @@ export const action: ActionFunction = async ({ request }) => {
   const formPayload = Object.fromEntries(await request.formData())
 
   try {
+    const { db } = await connectToDatabase()
     const data = registerSchema.parse(formPayload)
 
     // Check if user already exists

@@ -285,8 +285,7 @@ const Navbar: React.FC<NavbarProps> = ({ user, productsInCart }) => {
                       aria-hidden="true"
                       className="h-6 w-6 flex-shrink-0 text-zinc-400 group-hover:text-zinc-800 duration-200"
                     />
-                    <span className="ml-2 text-sm font-medium text-zinc-700 group-hover:text-zinc-800 duration-200">{productsInCart}</span>
-                    <span className="sr-only">items in cart, view bag</span>
+                    {productsInCart && <span className="ml-2 text-sm font-medium text-zinc-700 group-hover:text-zinc-800 duration-200"> productsInCart</span>}
                   </a>
 
                   <DropdownMenu open={profileOpen} onOpenChange={setProfileOpen} >
