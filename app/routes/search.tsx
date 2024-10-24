@@ -12,8 +12,7 @@ import { connectToDatabase } from "@utils/db.server";
 
 const ProjectList = () => {
   const loaderData = useLoaderData<typeof loader>();
-  const products = loaderData.products
-  const filters = loaderData.filters
+  const { products, filters } = loaderData;
   const totalPages = Array.from({ length: 10 }, (_, i) => i + 1);
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState<boolean>(false);
 
@@ -40,7 +39,7 @@ const ProjectList = () => {
     <div className="default-container pb-16 w-full relative mt-10 grid gird-cols-1 lg:grid-cols-12 gap-6">
       {/* Filters */}
       <div className="col-span-4 xl:col-span-3 max-lg:hidden">
-        {products.length > 0 && <SidebarFilter filters={filters} maxPriceRange={getMinMaxPriceRange().maxPriceRange} minPriceRange={getMinMaxPriceRange().minPriceRange} />}
+        {filters && <SidebarFilter filters={filters} maxPriceRange={getMinMaxPriceRange().maxPriceRange} minPriceRange={getMinMaxPriceRange().minPriceRange} />}
       </div>
 
       {/* Search */}
@@ -115,9 +114,27 @@ export const loader: LoaderFunction = async ({ request }) => {
   let languages: FilterCategory[] = [];
   let genres: FilterCategory[] = [];
 
-  filteredProductsByKeyword.map((product: any) => { !authors.includes(product.author) && authors.push({ name: product.author }) })
-  filteredProductsByKeyword.map((product: any) => { !languages.includes(product.language) && languages.push({ name: product.language }) })
-  filteredProductsByKeyword.map((product: any) => { !languages.includes(product.genre) && genres.push({ name: product.genre }) })
+
+  // Get unique authors
+  filteredProductsByKeyword.map((product: any) => {
+    if (!authors.find((author) => author.name.toLowerCase() === product.author.trim().toLowerCase())) {
+      authors.push({ name: product.author.trim() });
+    }
+  });
+
+  // Get unique languages
+  filteredProductsByKeyword.map((product: any) => {
+    if (!languages.find((language) => language.name.toLowerCase() === product.language.trim().toLowerCase())) {
+      languages.push({ name: product.language.trim() });
+    }
+  });
+
+  // Get unique genres
+  filteredProductsByKeyword.map((product: any) => {
+    if (!genres.find((genre) => genre.name.toLowerCase() === product.genre.trim().toLowerCase())) {
+      genres.push({ name: product.genre.trim() });
+    }
+  });
 
   const filters = [
     { name: "Genre", subCategories: [...genres] },
