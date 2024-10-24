@@ -2,19 +2,24 @@ import MobileFilter from "@components/sections/mobile-filter";
 import SidebarFilter from "@components/sections/sidebar-filter";
 import BookSearch from "@components/sections/book-search";
 import { Suspense, useEffect, useState } from "react";
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData, useSearchParams } from "@remix-run/react";
 import { BookProps, FilterCategory } from "~/types";
 import ProductList from "@components/sections/product-list";
 import BookCardSkeleton from "@components/skeletons/book-card-skeleton";
-import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@components/ui/pagination";
+import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@components/ui/pagination";
 import { LoaderFunction, json } from "@remix-run/node";
 import { connectToDatabase } from "@utils/db.server";
+import clsx from "clsx";
+import { Ellipsis } from "lucide-react";
+import { Separator } from "~/components/ui/separator";
 
 const ProjectList = () => {
   const loaderData = useLoaderData<typeof loader>();
-  const { products, filters } = loaderData;
-  const totalPages = Array.from({ length: 10 }, (_, i) => i + 1);
+  const { products, filters, totalPages, totalProducts } = loaderData;
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState<boolean>(false);
+  const [searchParams, setSearchParams] = useSearchParams()
+  const curentPage = Number(searchParams.get('page') || 1)
+
 
   // Disable scrolling when mobile filter is open
   useEffect(() => {
@@ -44,7 +49,7 @@ const ProjectList = () => {
 
       {/* Search */}
       <div className="col-span-8 xl:col-span-9 ">
-        <BookSearch productsCount={products.length} onFilterClick={() => setIsMobileFilterOpen(true)} />
+        <BookSearch productsCount={totalProducts} onFilterClick={() => setIsMobileFilterOpen(true)} />
         <div className="flex flex-col space-y-5 mt-5">
           <Suspense fallback={
             <div className="grid gap-5 w-full">
@@ -55,21 +60,38 @@ const ProjectList = () => {
           </Suspense>
 
           {/* Pagination */}
+          <Separator className="mb-5" />
           {
-            products.length > 10 &&
-            <Pagination>
+            totalProducts > 8 &&
+            <Pagination className="ml-auto">
               <PaginationContent>
                 <PaginationItem>
-                  <PaginationPrevious href="#" />
+                  <PaginationPrevious className={clsx(curentPage == 1 && 'pointer-events-none opacity-50')} onClick={() => setSearchParams({ page: (curentPage - 1).toString() })} />
                 </PaginationItem>
-                {totalPages.map((item: number) => (
-                  <PaginationItem key={item}>
-                    <PaginationLink href="#">{item}</PaginationLink>
-                  </PaginationItem>
-                ))}
+                {Array.from({ length: totalPages }, (_, i) => i + 1).slice(curentPage > 3 ? curentPage - 3 : 0, curentPage > 3 ? curentPage + 1 : 3)
+                  .map((item: number) => (
+                    <PaginationItem key={item}>
+                      <PaginationLink className="cursor-pointer" onClick={() => setSearchParams({ page: item.toString() })} isActive={item == curentPage}>{item}</PaginationLink>
+                    </PaginationItem>
+                  ))}
+
+                {
+                  totalPages > 3 && totalPages !== curentPage + 1 && totalPages !== curentPage &&
+                  <div className="flex items-center gap-2">
+                    <div>
+                      <PaginationEllipsis className="cursor-pointer" />
+                    </div>
+                    <PaginationItem>
+                      <PaginationLink className="cursor-pointer" onClick={() => setSearchParams({ page: totalPages })} isActive={totalPages == curentPage}>{totalPages}</PaginationLink>
+                    </PaginationItem>
+                  </div>
+                }
+
+
                 <PaginationItem>
-                  <PaginationNext href="#" />
+                  <PaginationNext className={clsx(curentPage == totalPages && 'pointer-events-none opacity-50')} onClick={() => setSearchParams({ page: (curentPage + 1).toString() })} />
                 </PaginationItem>
+
               </PaginationContent>
             </Pagination>
           }
@@ -162,6 +184,13 @@ export const loader: LoaderFunction = async ({ request }) => {
     }
   }
 
-  const products = await collection.find(query).toArray();
-  return json({ products, filters });
+  const page = url.searchParams.get("page") || 1;
+  const booksPerPage = 2;
+  const skip = (Number(page) - 1) * booksPerPage;
+
+  const totalProducts = await collection.countDocuments(query)
+  const totalPages = Math.ceil(totalProducts / booksPerPage);
+  const products = await collection.find(query).skip(skip).limit(booksPerPage).toArray();
+
+  return json({ products, filters, totalPages, totalProducts });
 };
