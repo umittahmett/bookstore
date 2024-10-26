@@ -12,9 +12,7 @@ export function AnimatedCircularProgressBarDemo({ isLoading }: { isLoading: bool
         }
         return prev + 10
       };
-
-      const interval = setInterval(() => setValue(handleIncrement), 50)
-      return () => clearInterval(interval);
+      setValue(handleIncrement)
     } else {
       setValue(100)
     }
