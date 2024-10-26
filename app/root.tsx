@@ -6,6 +6,7 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
+  useNavigation,
 } from "@remix-run/react";
 import type { LinksFunction, LoaderFunction } from "@remix-run/node";
 import "./tailwind.css";
@@ -21,6 +22,7 @@ import { ObjectId } from "mongodb";
 import { JwtPayload } from "jsonwebtoken";
 import { connectToDatabase } from "@utils/db.server";
 import GlobalAlertDialog from "@components/popups/global-alert-dialog";
+import { useEffect } from "react";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -61,7 +63,17 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const loaderData = useLoaderData<typeof loader>();
-  const isLoading = useAtomValue(isLoadingAtom);
+  const [isLoading, setIsloading] = useAtom(isLoadingAtom);
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    if (navigation.state === "submitting" || navigation.state === "loading") {
+      setIsloading(true);
+    } else {
+      setIsloading(false);
+    }
+  }, [navigation.state]);
+
   return (
     <html lang="en">
       <head>
