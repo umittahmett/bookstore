@@ -10,7 +10,6 @@ import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, Pagi
 import { LoaderFunction, json } from "@remix-run/node";
 import { connectToDatabase } from "@utils/db.server";
 import clsx from "clsx";
-import { Ellipsis } from "lucide-react";
 import { Separator } from "~/components/ui/separator";
 
 const ProjectList = () => {
@@ -19,7 +18,6 @@ const ProjectList = () => {
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState<boolean>(false);
   const [searchParams, setSearchParams] = useSearchParams()
   const curentPage = Number(searchParams.get('page') || 1)
-
 
   // Disable scrolling when mobile filter is open
   useEffect(() => {
@@ -62,16 +60,16 @@ const ProjectList = () => {
           {/* Pagination */}
           <Separator className="mb-5" />
           {
-            totalProducts > 8 &&
+            totalProducts > 10 &&
             <Pagination className="ml-auto">
               <PaginationContent>
                 <PaginationItem>
-                  <PaginationPrevious className={clsx(curentPage == 1 && 'pointer-events-none opacity-50')} onClick={() => setSearchParams({ page: (curentPage - 1).toString() })} />
+                  <PaginationPrevious className={clsx(curentPage == 1 && 'pointer-events-none opacity-50')} onClick={() => setSearchParams({ keyword: searchParams.get('keyword') as string, page: (curentPage - 1).toString() })} />
                 </PaginationItem>
                 {Array.from({ length: totalPages }, (_, i) => i + 1).slice(curentPage > 3 ? curentPage - 3 : 0, curentPage > 3 ? curentPage + 1 : 3)
                   .map((item: number) => (
                     <PaginationItem key={item}>
-                      <PaginationLink className="cursor-pointer" onClick={() => setSearchParams({ page: item.toString() })} isActive={item == curentPage}>{item}</PaginationLink>
+                      <PaginationLink className="cursor-pointer" onClick={() => setSearchParams({ keyword: searchParams.get('keyword') as string, page: item.toString() })} isActive={item == curentPage}>{item}</PaginationLink>
                     </PaginationItem>
                   ))}
 
@@ -82,16 +80,14 @@ const ProjectList = () => {
                       <PaginationEllipsis className="cursor-pointer" />
                     </div>
                     <PaginationItem>
-                      <PaginationLink className="cursor-pointer" onClick={() => setSearchParams({ page: totalPages })} isActive={totalPages == curentPage}>{totalPages}</PaginationLink>
+                      <PaginationLink className="cursor-pointer" onClick={() => setSearchParams({ keyword: searchParams.get('keyword') as string, page: totalPages })} isActive={totalPages == curentPage}>{totalPages}</PaginationLink>
                     </PaginationItem>
                   </div>
                 }
 
-
                 <PaginationItem>
                   <PaginationNext className={clsx(curentPage == totalPages && 'pointer-events-none opacity-50')} onClick={() => setSearchParams({ page: (curentPage + 1).toString() })} />
                 </PaginationItem>
-
               </PaginationContent>
             </Pagination>
           }
@@ -185,7 +181,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   }
 
   const page = url.searchParams.get("page") || 1;
-  const booksPerPage = 2;
+  const booksPerPage = 10;
   const skip = (Number(page) - 1) * booksPerPage;
 
   const totalProducts = await collection.countDocuments(query)
