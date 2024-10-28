@@ -289,7 +289,7 @@ const Navbar: React.FC<NavbarProps> = ({ user, productsInCart }) => {
                   </a>
 
                   <DropdownMenu open={profileOpen} onOpenChange={setProfileOpen} >
-                    <DropdownMenuTrigger className='p-2 pl-0'>
+                    <DropdownMenuTrigger className='max-lg:hidden p-2 pl-0'>
                       <UserCircle className='size-6 group-hover:text-zinc-800 duration-200 text-zinc-400' />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-56">
@@ -332,6 +332,8 @@ const Navbar: React.FC<NavbarProps> = ({ user, productsInCart }) => {
                       }
                     </DropdownMenuContent>
                   </DropdownMenu>
+
+                  <a href="/profile"><UserCircle className='size-6 group-hover:text-zinc-800 duration-200 text-zinc-400 lg:hidden' /></a>
                 </div>
               </div>
             </div>
