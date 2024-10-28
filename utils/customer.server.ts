@@ -1,10 +1,10 @@
 import { connectToDatabase } from "./db.server";
 import bcrypt from "bcryptjs";
 
-const client =  await connectToDatabase()
-const usersCollection = client.db.collection("customers");
 
 export async function createUser({ email, password, fullName,phone, birthDate }: { email: string; password: string,fullName: string, phone: string, birthDate: any }) {
+  const {db} =  await connectToDatabase()
+  const usersCollection = db.collection("customers");
   const hashedPassword = await bcrypt.hash(password, 10);
   const result = await usersCollection.insertOne({
     fullName,
@@ -17,6 +17,8 @@ export async function createUser({ email, password, fullName,phone, birthDate }:
 }
 
 export async function findUserByEmail(email: string) {
+  const {db} =  await connectToDatabase()
+  const usersCollection = db.collection("customers");
   return await usersCollection.findOne({ email });
 }
 
