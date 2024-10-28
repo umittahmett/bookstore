@@ -1,10 +1,19 @@
 import { Button } from "@components/ui/button"
-import { Outlet, useLocation } from "@remix-run/react"
+import { Link, Outlet, useLocation } from "@remix-run/react"
 import { profileNavigation } from "~/data"
 import clsx from "clsx"
 import { json, LoaderFunction, redirect } from "@remix-run/node";
 import { tokenCookie } from "@utils/cookie";
 import { verifyJWT } from "@utils/auth.server";
+import { ChevronLeft } from "lucide-react";
+
+// Enum for mapping pathnames to page names
+enum PageNames {
+  "/profile" = "Profile",
+  "/profile/orders" = "Orders",
+  "/profile/addresses" = "Addresses",
+  "/profile/user-info" = "User Information",
+}
 
 export const loader: LoaderFunction = async ({ request }) => {
   try {
@@ -29,14 +38,17 @@ export const loader: LoaderFunction = async ({ request }) => {
   }
 };
 
-export default function OrderManagement() {
+export default function ProfileLayout() {
   const location = useLocation()
   const pathName = location.pathname
+
+  // Get the page name from the enum, or use a default if not found
+  const pageName = PageNames[pathName as keyof typeof PageNames] || "Profilim"
 
   return (
     <div className="flex default-container h-fit pb-10">
       {/* Sidebar */}
-      <aside className="w-64 bg-zinc-50 p-6 h-dvh mt-6 rounded-lg border border-zinc-200">
+      <aside className="w-64 max-lg:hidden bg-zinc-50 p-6 h-dvh mt-6 rounded-lg border border-zinc-200">
         <div className="mb-6">
           <h2 className="text-xl font-semibold">Ümit Ahmet</h2>
         </div>
@@ -55,11 +67,21 @@ export default function OrderManagement() {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 p-6 overflow-auto">
+      <main className="flex-1 lg:p-6 overflow-auto py-6">
+        {pageName !== "Profile" &&
+          <div className="flex items-center justify-start gap-2.5 pb-6">
+            <Link to='/profile'>
+              <Button size='icon' variant='outline'>
+                <ChevronLeft className="size-6" />
+              </Button>
+            </Link>
+            <h1 className="text-2xl font-semibold">{pageName}</h1>
+          </div>
+        }
         <div className="w-full">
           <Outlet />
         </div>
-      </main>
-    </div>
+      </main >
+    </div >
   )
 }
