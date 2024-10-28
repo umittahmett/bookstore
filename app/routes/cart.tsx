@@ -1,5 +1,5 @@
 import { Suspense, useState } from 'react'
-import { ArrowRight, ShoppingBag, Trash2 } from 'lucide-react'
+import { ArrowRight, ChevronUp, ShoppingBag, Trash2 } from 'lucide-react'
 import { Checkbox } from '@components/ui/checkbox'
 import { Button } from '@components/ui/button'
 import { CartProductProps } from '~/types'
@@ -12,6 +12,7 @@ import { JwtPayload } from 'jsonwebtoken'
 import { useLoaderData } from '@remix-run/react'
 import Counter from '@components/ui/counter'
 import { useFetchAction } from '@hooks/use-global-submit'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '~/components/ui/dropdown-menu'
 
 const Cart: React.FC = () => {
   const userCart = useLoaderData<typeof loader>();
@@ -105,43 +106,46 @@ const Cart: React.FC = () => {
             <div className="space-y-4">
               {cartItems.map((item) => (
                 <div key={item._id.toString()} className="flex relative items-center space-x-4 py-4 border-b">
-                  <Checkbox
-                    id={`product-${item._id}`}
-                    defaultChecked={item.selected}
-                    onCheckedChange={() => handleToggleSelect(item._id.toString())}
-                  />
+                  <div className='flex items-center gap-2 lg:gap-4'>
+                    <Checkbox
+                      id={`product-${item._id}`}
+                      defaultChecked={item.selected}
+                      onCheckedChange={() => handleToggleSelect(item._id.toString())}
+                    />
 
-                  <div className='size-28 flex-shrink-0 rounded-lg bg-zinc-100 flex p-2 items-center justify-center'>
-                    <img src={item.images[0]} alt={item.title} className="h-full w-fit object-contain" />
+                    <div className='size-28 max-lg:w-20 flex-shrink-0 rounded-lg bg-zinc-100 flex p-2 items-center justify-center'>
+                      <img src={item.images[0]} alt={item.title} className="h-full w-fit object-contain" />
+                    </div>
+                  </div>
+                  <div className='flex w-full items-center justify-between max-lg:flex-col max-lg:items-start'>
+                    <div className="flex-grow">
+                      <h3 className="font-semibold line-clamp-1">{item.title}</h3>
+                      <p className="text-zinc-600 line-clamp-1 lg:line-clamp-2">{item.description}</p>
+                    </div>
+                    <div className='flex max-lg:mt-2.5 max-lg:justify-between max-lg:w-full items-center gap-10'>
+                      <Counter
+                        reduce={() => item.quantity > 1 && handleUpdateQuantity(item._id.toString(), Number(item.quantity) - 1)}
+                        increase={() => handleUpdateQuantity(item._id.toString(), Number(item.quantity) + 1)}
+                        count={item.quantity}
+                        onChange={(e: any) => handleUpdateQuantity(item._id.toString(), Number(e.target.value))}
+                      />
+                      <span className="font-semibold">${item.price.toFixed(2)}</span>
+                    </div>
                   </div>
 
-                  <div className="flex-grow">
-                    <h3 className="font-semibold">{item.title}</h3>
-                    <p className="text-zinc-600 line-clamp-2">{item.description}</p>
-                  </div>
                   <Button variant="ghost" className='size-auto hover:text-zinc-700 text-xs hover:bg-white absolute top-0 right-0 text-zinc-500' size="icon"
                     onClick={() => handleDeleteProduct(item._id.toString())}
                   >
                     <Trash2 className="size-4" />
                     Delete
                   </Button>
-                  <div className='flex items-center gap-10'>
-                    <Counter
-                      reduce={() => item.quantity > 1 && handleUpdateQuantity(item._id.toString(), Number(item.quantity) - 1)}
-                      increase={() => handleUpdateQuantity(item._id.toString(), Number(item.quantity) + 1)}
-                      count={item.quantity}
-                      onChange={(e: any) => handleUpdateQuantity(item._id.toString(), Number(e.target.value))}
-                    />
-                    <span className="font-semibold">${item.price.toFixed(2)}</span>
-                  </div>
-
                 </div>
               ))}
             </div>
           </div>
 
           {/* Cart Summary */}
-          <div className='bg-zinc-50 p-6 rounded-xl sticky top-10'>
+          <div className='bg-zinc-50 max-lg:hidden p-6 rounded-xl sticky top-10'>
             <div className="*:py-4 divide-zinc-200 divide-y ">
               <div className="flex justify-between">
                 <span>Subtotal</span>
@@ -170,6 +174,49 @@ const Cart: React.FC = () => {
                 <Button variant="outline" className="w-full">Continue Shopping</Button>
               </a>
             </div>
+          </div>
+
+          {/* Cart Summary Mobile */}
+          <div className='lg:hidden z-20 w-full px-6 flex items-center gap-2.5 justify-between py-2.5 fixed bottom-0 left-0 h-fit bg-zinc-50'>
+            <div className='flex gap-2.5 items-center'>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button size="closeIcon">
+                    <ChevronUp className='size-5' />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-dvw mb-4 shadow-none rounded-b-none ">
+                  <div className="*:py-2 text-sm divide-zinc-200 divide-y px-6">
+                    <div className="flex justify-between">
+                      <span>Subtotal</span>
+                      <span>${subtotal.toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Tax</span>
+                      <span>${tax.toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Shipping</span>
+                      <span>${shipping.toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between font-semibold text-lg">
+                      <span>Total</span>
+                      <span>${total.toFixed(2)}</span>
+                    </div>
+                  </div>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <div className='flex flex-col'>
+                <span className='text-zinc-700 uppercase text-sm'>Total</span>
+                <span>${total.toFixed(2)}</span>
+              </div>
+            </div>
+
+            <a aria-disabled={total === 0} href="/checkout">
+              <Button className='w-full mb-2.5'>
+                Confirm payment
+              </Button>
+            </a>
           </div>
         </div>
       </Suspense>
