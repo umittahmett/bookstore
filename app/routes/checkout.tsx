@@ -42,16 +42,17 @@ export default function CheckoutPage() {
           {/* Saved Address Selection */}
           <h2 className="text-xl font-semibold mb-2">Saved Addresses</h2>
           <div className='w-full'>
-            <SavedAddressCard moreDetailed {...addresses[0]} />
+            <SavedAddressCard moreDetailed {...selectedAddress} />
             {/* All Addresses Popup */}
             <AddressesPopup setSelectedAddress={setSelectedAddress} addresses={addresses} />
 
-            <div className='flex items-center w-full mb-4 mt-10'>
+            <div className='flex items-center opacity-50 w-full mb-4 mt-6'>
               <Checkbox
                 className="max-lg:size-6 mr-2"
                 id={`cashOnDelivery`}
-                defaultChecked={cashOnDelivery}
-                onChange={() => setCashOnDelivery(!cashOnDelivery)}
+                checked={true}
+              // defaultChecked={cashOnDelivery}
+              // onChange={() => setCashOnDelivery(!cashOnDelivery)}
               />
               <Label htmlFor="additionalInfo" className="text-sm text-zinc-600">Cash on delivery</Label>
             </div>
