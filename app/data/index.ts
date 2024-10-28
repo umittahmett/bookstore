@@ -1,4 +1,4 @@
-import { CreditCard, Dribbble, Facebook, Github, HelpCircle, Info, Instagram, LogOut, MapPin, Package, RefreshCcw, RotateCcw, Twitter, User } from "lucide-react";
+import { Dribbble, Facebook, Github, HelpCircle, Instagram, MapPin, Package, RefreshCcw, RotateCcw, Twitter, User } from "lucide-react";
 import { JobOpeningProps, NavigationLinkProps, SocialLinkProps, TimelineProps } from "~/types";
 import ExampleBannerImage from "@assets/images/examples/example-banner-image.webp";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
@@ -7,13 +7,13 @@ export const footerNavigation: NavigationLinkProps[] = [
   {
     title: "Shop",
     links: [
-      { href: "/search?Genre=fantasy", title: "Fantasy" },
-      { href: "/search?Genre=mystery", title: "Mystery" },
-      { href: "/search?Genre=thriller", title: "Thriller" },
-      { href: "/search?Genre=romance", title: "Romance" },
-      { href: "/search?Genre=historical-fiction", title: "Historical Fiction" },
-      { href: "/search?Genre=science-fiction", title: "Science Fiction" },
-      { href: "/search?Genre=literary-fiction", title: "Literary Fiction" },
+      { href: "/search?keyword=fantasy", title: "Fantasy" },
+      { href: "/search?keyword=mystery", title: "Mystery" },
+      { href: "/search?keyword=thriller", title: "Thriller" },
+      { href: "/search?keyword=romance", title: "Romance" },
+      { href: "/search?keyword=historical-fiction", title: "Historical Fiction" },
+      { href: "/search?keyword=science-fiction", title: "Science Fiction" },
+      { href: "/search?keyword=literary-fiction", title: "Literary Fiction" },
     ],
   },
   {
@@ -66,13 +66,13 @@ export const navigation = {
       featured: [
         {
           name: 'New Releases',
-          href: '#',
+          href: '/search?Category=fiction&Type=new-releases',
           imageSrc: ExampleBannerImage,
           imageAlt: 'A stack of newly released fiction books.',
         },
         {
           name: 'Bestsellers',
-          href: '#',
+          href: '/search?Category=fiction&Type=bestsellers',
           imageSrc: ExampleBannerImage,
           imageAlt: 'Bestselling fiction books displayed on a shelf.',
         },
@@ -82,35 +82,34 @@ export const navigation = {
           id: 'genres',
           name: 'Genres',
           items: [
-            { name: 'Fantasy', href: '#' },
-            { name: 'Mystery', href: '#' },
-            { name: 'Thriller', href: '#' },
-            { name: 'Romance', href: '#' },
-            { name: 'Historical Fiction', href: '#' },
-            { name: 'Science Fiction', href: '#' },
-            { name: 'Literary Fiction', href: '#' },
-            { name: 'Browse All', href: '#' },
+            { name: 'Fantasy', href: '/search?keyword=fantasy' },
+            { name: 'Mystery', href: '/search?keyword=mystery' },
+            { name: 'Thriller', href: '/search?keyword=thriller' },
+            { name: 'Romance', href: '/search?keyword=romance' },
+            { name: 'Historical Fiction', href: '/search?keyword=historical-fiction' },
+            { name: 'Science Fiction', href: '/search?keyword=science-fiction' },
+            { name: 'Literary Fiction', href: '/search?keyword=literary-fiction' },
           ],
         },
         {
           id: 'formats',
           name: 'Formats',
           items: [
-            { name: 'Hardcover', href: '#' },
-            { name: 'Paperback', href: '#' },
-            { name: 'Audiobooks', href: '#' },
-            { name: 'E-books', href: '#' },
+            { name: 'Hardcover', href: '/search?Format=hardcover' },
+            { name: 'Paperback', href: '/search?Format=paperback' },
+            { name: 'Audiobooks', href: '/search?Format=audiobooks' },
+            { name: 'E-books', href: '/search?Format=e-books' },
           ],
         },
         {
           id: 'authors',
           name: 'Authors',
           items: [
-            { name: 'J.K. Rowling', href: '#' },
-            { name: 'Stephen King', href: '#' },
-            { name: 'George R.R. Martin', href: '#' },
-            { name: 'Agatha Christie', href: '#' },
-            { name: 'Margaret Atwood', href: '#' },
+            { name: 'J.K. Rowling', href: '/search?keyword=J.K. Rowling' },
+            { name: 'Stephen King', href: '/search?keyword=Stephen King' },
+            { name: 'George R.R. Martin', href: '/search?keyword=George R.R. Martin' },
+            { name: 'Agatha Christie', href: '/search?keyword=Agatha Christie' },
+            { name: 'Margaret Atwood', href: '/search?keyword=Margaret Atwood' },
           ],
         },
       ],
@@ -121,13 +120,13 @@ export const navigation = {
       featured: [
         {
           name: 'New Releases',
-          href: '#',
+          href: '/search?Category=non-fiction&Type=new-releases',
           imageSrc: ExampleBannerImage,
           imageAlt: 'A stack of newly released non-fiction books.',
         },
         {
           name: 'Bestsellers',
-          href: '#',
+          href: '/search?Category=non-fiction&Type=bestsellers',
           imageSrc: ExampleBannerImage,
           imageAlt: 'Bestselling non-fiction books displayed on a table.',
         },
@@ -137,34 +136,33 @@ export const navigation = {
           id: 'genres',
           name: 'Genres',
           items: [
-            { name: 'Biography', href: '#' },
-            { name: 'Self-Help', href: '#' },
-            { name: 'Cookbooks', href: '#' },
-            { name: 'History', href: '#' },
-            { name: 'Science', href: '#' },
-            { name: 'Business', href: '#' },
-            { name: 'Travel', href: '#' },
-            { name: 'Browse All', href: '#' },
+            { name: 'Biography', href: '/search?keyword=biography' },
+            { name: 'Self-Help', href: '/search?keyword=self-help' },
+            { name: 'Cookbooks', href: '/search?keyword=cookbooks' },
+            { name: 'History', href: '/search?keyword=history' },
+            { name: 'Science', href: '/search?keyword=science' },
+            { name: 'Business', href: '/search?keyword=business' },
+            { name: 'Travel', href: '/search?keyword=travel' },
           ],
         },
         {
           id: 'formats',
           name: 'Formats',
           items: [
-            { name: 'Hardcover', href: '#' },
-            { name: 'Paperback', href: '#' },
-            { name: 'Audiobooks', href: '#' },
-            { name: 'E-books', href: '#' },
+            { name: 'Hardcover', href: '/search?Format=hardcover' },
+            { name: 'Paperback', href: '/search?Format=paperback' },
+            { name: 'Audiobooks', href: '/search?Format=audiobooks' },
+            { name: 'E-books', href: '/search?Format=e-books' },
           ],
         },
         {
           id: 'authors',
           name: 'Authors',
           items: [
-            { name: 'Malcolm Gladwell', href: '#' },
-            { name: 'Michelle Obama', href: '#' },
-            { name: 'Yuval Noah Harari', href: '#' },
-            { name: 'Brene Brown', href: '#' },
+            { name: 'Malcolm Gladwell', href: '/search?keyword=Malcolm Gladwell' },
+            { name: 'Michelle Obama', href: '/search?keyword=Michelle Obama' },
+            { name: 'Yuval Noah Harari', href: '/search?keyword=Yuval Noah Harari' },
+            { name: 'Brene Brown', href: '/search?keyword=Brene Brown' },
           ],
         },
       ],
@@ -176,13 +174,12 @@ export const navigation = {
     { name: 'Store Locations', href: '/store-locations' },
   ],
   profileNavigation: [
-    { name: 'Orders', href: '/profile/orders',icon: Package  },
-    { name: 'User Information', href: '/profile/user-info',icon: User  },
-    { name: 'Repurchase', href: '/profile/repurchase',icon: RefreshCcw  },
-    { name: 'Help', href: '/profile/help',icon: InfoCircledIcon  },
+    { name: 'Orders', href: '/profile/orders', icon: Package },
+    { name: 'User Information', href: '/profile/user-info', icon: User },
+    { name: 'Repurchase', href: '/profile/repurchase', icon: RefreshCcw },
+    { name: 'Help', href: '/profile/help', icon: InfoCircledIcon },
   ],
 };
-
 
 export const timeline:TimelineProps[] = [
   {
@@ -214,6 +211,7 @@ export const timeline:TimelineProps[] = [
     dateTime: '2022-12',
   },
 ]
+
 export const jobOpenings:JobOpeningProps[] = [
   {
     role: 'Full-time designer',
