@@ -124,7 +124,7 @@ export default function BookDetailPage() {
         </CardContent>
       </Card>
 
-      <ProductSlider className='pt-0' title='Similar Books' books={similarProducts} />
+      {similarProducts.length > 0 && <ProductSlider className='pt-0' title='Similar Books' books={similarProducts} />}
     </div>
   )
 }
@@ -134,7 +134,6 @@ export const loader: LoaderFunction = async ({ params }) => {
   try {
     // Get product id
     const productId = params.product
-    console.log('product id', productId);
 
     const { db } = await connectToDatabase()
 
@@ -147,7 +146,7 @@ export const loader: LoaderFunction = async ({ params }) => {
     const productGenre = product.genre
 
     // Get similar products
-    const similarProducts = await db.collection('products').find({ genre: productGenre }).limit(4).toArray() || []
+    const similarProducts = await db.collection('products').find({ genre: productGenre, _id: { $ne: new ObjectId(productId) } },).limit(4).toArray() || []
 
     return json({ product, similarProducts })
   } catch (error) {
