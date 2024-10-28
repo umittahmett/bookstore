@@ -43,7 +43,7 @@ const AddressDetailForm: React.FC<AddressDetailFormProps> = ({ address, action, 
         method: 'post',
         action: '/api/address/add',
         redirectTo: redirectTo || '/profile/addresses',
-        successFunction: () => { successFunction }
+        successFunction: successFunction
       })
     }
     else {
