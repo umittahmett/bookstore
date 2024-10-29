@@ -2,32 +2,41 @@ import { Check, AlertCircle, Package, Truck, Calendar, ShoppingBag, FileText, Ar
 import { Button } from "@components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@components/ui/card"
 import { Separator } from "@components/ui/separator"
+import { useLoaderData } from "@remix-run/react"
+import { OrderProps } from "~/types"
+import { json, LoaderFunction, redirect } from "@remix-run/node"
+import { tokenCookie } from "@utils/cookie"
+import { verifyJWT } from "@utils/auth.server"
+import { JwtPayload } from "jsonwebtoken"
+import { connectToDatabase } from "@utils/db.server"
+import { ObjectId } from "mongodb"
 
 export default function OrderResult() {
-  const order = { success: true, orderNumber: "ORD123456", orderDate: "2024-10-12", estimatedDelivery: "2024-10-20", totalAmount: "$150.00" }
+  const loaderData = useLoaderData<typeof loader>()
+  const order: OrderProps = loaderData.order
 
-  const icon = order.success ? (
+  const icon = order ? (
     <Check className="h-6 w-6 text-green-600" />
   ) : (
     <AlertCircle className="h-6 w-6 text-red-600" />
   )
 
-  const title = order.success ? "Order Completed" : "Order Processing Error"
-  const subtitle = order.success
+  const title = order ? "Order Completed" : "Order Processing Error"
+  const subtitle = order
     ? "Thank you for your purchase!"
     : "We encountered an issue while processing your order."
   return (
     <div className="h-dvh py-10 bg-zinc-50">
       <Card className="w-full default-container !max-w-5xl py-8">
         <CardHeader className="text-center">
-          <div className={`w-12 h-12 ${order.success ? 'bg-green-100' : 'bg-red-100'} rounded-full flex items-center justify-center mx-auto mb-4`}>
+          <div className={`w-12 h-12 ${order ? 'bg-green-100' : 'bg-red-100'} rounded-full flex items-center justify-center mx-auto mb-4`}>
             {icon}
           </div>
-          <CardTitle className={`text-2xl font-bold ${order.success ? '' : 'text-red-600'}`}>{title}</CardTitle>
+          <CardTitle className={`text-2xl font-bold ${order ? '' : 'text-red-600'}`}>{title}</CardTitle>
           <p className="text-gray-500 mt-2">{subtitle}</p>
         </CardHeader>
         <CardContent className="space-y-6">
-          {order.success ?
+          {order ?
             <div className="grid grid-cols-1 gap-6 max-w-2xl mx-auto">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
@@ -35,15 +44,16 @@ export default function OrderResult() {
                     <Package className="h-5 w-5 text-gray-500" />
                     <span className="font-medium">Order number:</span>
                   </div>
-                  <span>#12345678</span>
+                  <span>#{order._id.toString()}</span>
                 </div>
                 <Separator />
+
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
                     <Calendar className="h-5 w-5 text-gray-500" />
                     <span className="font-medium">Order date:</span>
                   </div>
-                  <span>July 15, 2023</span>
+                  <span>{new Date(order.date).toDateString()}</span>
                 </div>
               </div>
               <Separator />
@@ -53,12 +63,12 @@ export default function OrderResult() {
                     <Truck className="h-5 w-5 text-gray-500" />
                     <span className="font-medium">Estimated delivery:</span>
                   </div>
-                  <span>July 20 - July 22, 2023</span>
+                  <span>{new Date(order.estimatedDelivery).toDateString()}</span>
                 </div>
                 <Separator />
                 <div className="flex items-center justify-between font-bold">
                   <span>Total amount:</span>
-                  <span>$249.99</span>
+                  <span>${order.total}</span>
                 </div>
               </div>
             </div>
@@ -83,9 +93,9 @@ export default function OrderResult() {
 
         </CardContent>
         <CardFooter className="flex flex-col sm:flex-row justify-center space-y-2 sm:space-y-0 sm:space-x-4 mt-6">
-          <a href={!order.success ? '/cart' : '/profile/orders/'}>
+          <a href={!order ? '/cart' : '/profile/orders/'}>
             <Button className="w-full sm:w-auto">
-              {!order.success ?
+              {!order ?
                 <><ArrowLeft className="size-4" />Back to cart</>
                 :
                 <><FileText className="size-4" /> View Order Details </>
@@ -103,3 +113,29 @@ export default function OrderResult() {
     </div >
   )
 }
+
+
+// Loader function to get user cart and products
+export const loader: LoaderFunction = async ({ request, params }) => {
+  try {
+    // Check token
+    const token = await tokenCookie.parse(request.headers.get("Cookie"));
+    if (!token) { return redirect("/auth/login") }
+    const user = verifyJWT(token) as JwtPayload
+    if (!user) { return redirect("/auth/login") }
+
+    const orderId = params.order
+
+    const { db } = await connectToDatabase()
+
+    // Get Order Details
+    const order = await db.collection('orders').findOne({ _id: new ObjectId(orderId as string) }) || null
+
+    // if (!order?._id) { return json({ error: 'Order not found' }, { status: 404 }) }
+
+    return json({ order });
+  } catch (error) {
+    console.error("Loader sırasında bir hata oluştu:", error);
+    throw new Error("Sunucu hatası: Kullanıcı doğrulama işlemi başarısız.");
+  }
+};
