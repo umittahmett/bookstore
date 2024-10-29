@@ -158,3 +158,17 @@ export interface AddressDetailFormProps {
   redirectTo?: string;
   successFunction?: () => void;
 }
+
+export interface OrderProps extends WithId<Document> {
+  products: {_id: string | ObjectId, quantity:number}[],
+  userId: user.id, 
+  status: 'pending' | 'completed' | 'cancelled', 
+  paymentMethod: 'cash_on_delivery' | 'credit_card', 
+  addressId: addressId, 
+  date: Date, 
+  estimatedDelivery: Date,
+  shippingCost: number,
+  total: total,
+  tax: number,
+  discount: number,
+}
