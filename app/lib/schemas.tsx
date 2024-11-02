@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export const addressFormSchema = z.object({
+  userId: z.string().optional(),
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
   firstName: z.string().min(2, { message: "First name must be at least 2 characters." }),
   lastName: z.string().min(2, { message: "Last name must be at least 2 characters." }),
