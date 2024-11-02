@@ -16,6 +16,7 @@ export const action: ActionFunction = async ({ request }) => {
   try {
     const { db } = await connectToDatabase()
     const data = addressFormSchema.parse(formPayload)
+    data.userId = user.id;
     await db.collection('addresses').insertOne(data)
     return json({ success: true, message: 'Address added' })
   } catch (error) {
