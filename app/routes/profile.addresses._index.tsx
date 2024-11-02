@@ -46,7 +46,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
     // Get user addresses
     const { db } = await connectToDatabase()
-    const addresses = await db.collection('addresses').find({ userId: user._id }).toArray()
+    const addresses = await db.collection('addresses').find({ userId: user.id }).toArray()
 
     return json({ addresses });
   } catch (error) {
