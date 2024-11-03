@@ -2,7 +2,7 @@ import MobileFilter from "@components/sections/mobile-filter";
 import SidebarFilter from "@components/sections/sidebar-filter";
 import BookSearch from "@components/sections/book-search";
 import { Suspense, useEffect, useState } from "react";
-import { useLoaderData, useSearchParams } from "@remix-run/react";
+import { useLoaderData, useNavigate, useSearchParams } from "@remix-run/react";
 import { BookProps, FilterCategory } from "~/types";
 import ProductList from "@components/sections/product-list";
 import BookCardSkeleton from "@components/skeletons/book-card-skeleton";
@@ -18,6 +18,14 @@ const ProjectList = () => {
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState<boolean>(false);
   const [searchParams, setSearchParams] = useSearchParams()
   const curentPage = Number(searchParams.get('page') || 1)
+  const navigate = useNavigate();
+
+  // Redirect to home if no keyword is provided
+  useEffect(() => {
+    if (searchParams.get('keyword') === null) {
+      navigate('/')
+    }
+  }, [])
 
   // Disable scrolling when mobile filter is open
   useEffect(() => {
