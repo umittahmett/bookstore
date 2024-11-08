@@ -98,7 +98,7 @@ export default function OrderResult() {
               {!order ?
                 <><ArrowLeft className="size-4" />Back to cart</>
                 :
-                <><FileText className="size-4" /> View Order Details </>
+                <><FileText className="size-4" /> View Orders </>
               }
             </Button>
           </a>
