@@ -61,9 +61,9 @@ export default function CheckoutPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full">
         <div>
           {/* Saved Address Selection */}
-          <h2 className="text-xl font-semibold mb-2">Saved Addresses</h2>
+          <h2 className="text-xl font-semibold mb-2">{selectedAddress ? 'Saved Addresses' : 'Address Data Not Found'}</h2>
           <div className='w-full'>
-            <SavedAddressCard moreDetailed {...selectedAddress} />
+            {selectedAddress && <SavedAddressCard moreDetailed {...selectedAddress} />}
             {/* All Addresses Popup */}
             <AddressesPopup setSelectedAddress={setSelectedAddress} addresses={addresses} />
 
@@ -170,7 +170,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     const { db } = await connectToDatabase()
 
     // Get user addresses
-    const addresses = await db.collection('addresses').find({ userId: user._id }).toArray()
+    const addresses = await db.collection('addresses').find({ userId: user.id }).toArray()
 
     // Get user cart
     const userCart = await db.collection('carts').findOne({ _id: new ObjectId(user.cartId as string) });
