@@ -5,7 +5,6 @@ import { Button } from '../ui/button'
 import { useState } from 'react'
 import AddressDetailForm from '../forms/address-detail-form'
 import { Plus } from 'lucide-react'
-import { set } from 'date-fns'
 
 const AddressesPopup: React.FC<AddressesPopupProps> = ({ addresses, setSelectedAddress }) => {
   const [showAddressForm, setShowAddressForm] = useState<boolean>(false)
@@ -16,7 +15,7 @@ const AddressesPopup: React.FC<AddressesPopupProps> = ({ addresses, setSelectedA
   return (
     <Dialog open={open} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button className='mt-2' size="sm">Change</Button>
+        <Button className='mt-2' size="sm">{addresses.length > 0 ? 'Change' : 'Add new'}</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-3xl">
         <DialogHeader>
