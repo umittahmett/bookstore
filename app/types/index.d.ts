@@ -105,15 +105,7 @@ export interface UserProps extends WithId<Document> {
   password:string
   cartId:ObjectId
 }
-export interface OrderProps {
-  seller: string;
-  date: string;
-  status: string;
-  product: BookProps;
-  count: number;
-  receiver: string;
-  address: AddressProps;
-}
+
 export interface ProductListProps {
   products: JsonifyObject<BookProps[]>;
 }export interface SidebarFilterProps{
@@ -160,7 +152,7 @@ export interface AddressDetailFormProps {
 }
 
 export interface OrderProps extends WithId<Document> {
-  products: {_id: string | ObjectId, quantity:number}[],
+  products: {_id: string | ObjectId, quantity:number}[] | BookProps[];
   userId: user.id, 
   status: 'pending' | 'completed' | 'cancelled', 
   paymentMethod: 'cash_on_delivery' | 'credit_card', 
