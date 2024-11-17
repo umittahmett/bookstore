@@ -11,6 +11,7 @@ import { connectToDatabase } from "@utils/db.server"
 import { useLoaderData } from "@remix-run/react"
 import OrderCard from "~/components/cards/order-card"
 import { OrderProps } from "~/types"
+import { ObjectId } from "mongodb"
 
 export default function Orders() {
   const [keyword, setKeyword] = useState("")
@@ -18,7 +19,6 @@ export default function Orders() {
 
   const loaderData = useLoaderData<typeof loader>()
   const { orders } = loaderData
-
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4">Siparişlerim</h1>
@@ -49,11 +49,7 @@ export default function Orders() {
         <TabsContent value="all">
           <div className="space-y-4">
             {orders.map((order: OrderProps, index: number) => (
-              <div key={index}>
-                {order.products.map((product: any, productIndex) => (
-                  <OrderCard key={productIndex} {...product} />
-                ))}
-              </div>
+              <OrderCard key={index} {...order} />
             ))}
           </div>
         </TabsContent>
@@ -77,13 +73,15 @@ export const loader: LoaderFunction = async ({ request }) => {
     const ordersData = await db.collection('orders').find({ userId: user.id }).toArray()
 
     const orders = await Promise.all(ordersData.map(async (order: any) => {
-      const products = await db.collection('products').find({ _id: { $in: order.products } }).toArray()
+      let products = []
+      for (const product of order.products) {
+        const productData = await db.collection('products').findOne({ _id: new ObjectId(product._id as string) })
+        products.push(productData)
+      }
       return { ...order, products }
-    }
-    ))
+    }))
 
-    console.log(orders);
-
+    console.log(orders[0].products);
 
     return json({ orders })
   } catch (error) {
