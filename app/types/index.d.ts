@@ -150,17 +150,16 @@ export interface AddressDetailFormProps {
   redirectTo?: string;
   successFunction?: () => void;
 }
-
 export interface OrderProps extends WithId<Document> {
-  products: {_id: string | ObjectId, quantity:number}[] | BookProps[];
-  userId: user.id, 
+  products: BookProps[];
+  userId: string 
   status: 'pending' | 'completed' | 'cancelled', 
   paymentMethod: 'cash_on_delivery' | 'credit_card', 
-  addressId: addressId, 
-  date: Date, 
-  estimatedDelivery: Date,
-  shippingCost: number,
-  total: total,
-  tax: number,
-  discount: number,
+  addressId: string  
+  date: Date
+  estimatedDelivery: Date
+  shippingCost: number
+  total: number
+  tax: number
+  discount: number
 }
